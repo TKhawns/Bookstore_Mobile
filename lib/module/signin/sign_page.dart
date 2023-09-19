@@ -29,17 +29,41 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(25),
+      padding: EdgeInsets.only(right: 25, bottom: 25, left: 25),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          Container(
+            child: Image.asset('assets/images/textlogo.png'),
+            padding: EdgeInsets.only(bottom: 50),
+          ),
+          Container(
+            padding: EdgeInsets.only(right: 110, bottom: 30),
+            child: Text(
+              "Welcome back",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: const Color.fromARGB(255, 0, 151, 178)),
+            ),
+          ),
           _buildPhoneField(),
           _buildPassField(),
           Container(
-            padding: EdgeInsets.only(top: 30),
+            padding: EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 30),
             child: NormalButton(
               title: "Đăng nhập",
               onPressed: () {},
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 30, bottom: 25),
+            child: Text(
+              "Don't have account ?",
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
             ),
           )
         ],

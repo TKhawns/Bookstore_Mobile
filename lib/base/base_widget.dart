@@ -22,7 +22,7 @@ class PageContainer extends StatelessWidget {
           centerTitle: true,
           title: Text(
             title,
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.white, fontSize: 25),
           ),
         ),
         body: child,
