@@ -53,7 +53,10 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
             padding: EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 30),
             child: NormalButton(
               title: "Đăng nhập",
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, "/home");
+                return;
+              },
             ),
           ),
           Container(
