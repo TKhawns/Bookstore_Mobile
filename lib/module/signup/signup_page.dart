@@ -1,35 +1,34 @@
 import 'package:bookstore_mobile/base/base_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../widget/normalbutton.dart';
 
-class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PageContainer(title: "Sign In", child: SignInFormWidget());
+    return PageContainer(title: "Sign Up", child: SignUpFormWidget());
   }
 }
 
-class SignInFormWidget extends StatefulWidget {
-  const SignInFormWidget({super.key});
+class SignUpFormWidget extends StatefulWidget {
+  const SignUpFormWidget({super.key});
 
   @override
-  State<SignInFormWidget> createState() => _SignInFormWidgetState();
+  State<SignUpFormWidget> createState() => _SignUpFormWidgetState();
 }
 
-class _SignInFormWidgetState extends State<SignInFormWidget> {
+class _SignUpFormWidgetState extends State<SignUpFormWidget> {
+  final TextEditingController _txtDisplayNameController =
+      TextEditingController();
   final TextEditingController _txtPhoneController = TextEditingController();
   final TextEditingController _txtPassController = TextEditingController();
-
-  // code of check validate Sign in here
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 25, bottom: 25, left: 25),
+      padding: EdgeInsets.only(right: 25, bottom: 10, left: 25),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -38,21 +37,22 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
             padding: EdgeInsets.only(bottom: 50),
           ),
           Container(
-            padding: EdgeInsets.only(right: 110, bottom: 30),
+            padding: EdgeInsets.only(right: 180, bottom: 30),
             child: Text(
-              "Welcome back",
+              "Welcome,",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
                   color: const Color.fromARGB(255, 0, 151, 178)),
             ),
           ),
+          _buildDisplayNameField(),
           _buildPhoneField(),
           _buildPassField(),
           Container(
-            padding: EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 30),
+            padding: EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 10),
             child: NormalButton(
-              title: "Đăng nhập",
+              title: "Đăng ký",
               onPressed: () {},
             ),
           ),
@@ -62,7 +62,7 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Don't have account ?",
+                  "Have an account ?",
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.black,
@@ -73,6 +73,26 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildDisplayNameField() {
+    return Container(
+      padding: EdgeInsets.only(top: 10),
+      child: TextField(
+        controller: _txtDisplayNameController,
+        obscureText: false,
+        cursorColor: Colors.black,
+        decoration: InputDecoration(
+          icon: Icon(
+            Icons.account_box,
+            color: Colors.blue,
+          ),
+          hintText: "Display Name",
+          labelText: "Display Name",
+          labelStyle: TextStyle(color: Colors.black),
+        ),
       ),
     );
   }
@@ -122,12 +142,12 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
               borderRadius: new BorderRadius.circular(4.0),
             )),
         child: Text(
-          "Đăng ký",
+          "Đăng nhập",
           style: TextStyle(
               fontSize: 20, color: const Color.fromARGB(255, 0, 151, 178)),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, "/sign-up");
+          Navigator.pushNamed(context, "/sign-in");
         },
       ),
     );

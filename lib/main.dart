@@ -1,4 +1,5 @@
 import 'package:bookstore_mobile/module/signin/sign_page.dart';
+import 'package:bookstore_mobile/module/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 
@@ -16,7 +17,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SignInPage(),
+      initialRoute: "/",
+      routes: <String, WidgetBuilder>{
+        "/": (context) => SignInPage(),
+        "/sign-up": (context) => SignUpPage(),
+        "/sign-in": (context) => SignInPage(),
+      },
+      //home: SignInPage(),
     );
   }
 }
