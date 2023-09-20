@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:bookstore_mobile/widget/author_list.dart';
+import 'package:bookstore_mobile/widget/navigator_item.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/rendering.dart';
 
 import '../../widget/filter_widget.dart';
 
@@ -20,12 +22,15 @@ class _HomePageState extends State<HomePage> {
   Filter selectedFilter = Filter("");
 
   List<Author> authors = getAuthorList();
+  List<NavigationItem> navigationItems = getNavigationItemList();
+  NavigationItem selectedItem = NavigationItem(Icons.book, "");
 
   @override
   void initState() {
     super.initState();
     setState(() {
       selectedFilter = filters[0];
+      selectedItem = navigationItems[0];
     });
   }
 
@@ -190,6 +195,28 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      bottomNavigationBar: Container(
+        height: 90,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 8,
+              blurRadius: 12,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: buildNavigationItems(),
+        ),
+      ),
     );
   }
 
@@ -314,6 +341,67 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  List<Widget> buildNavigationItems() {
+    List<Widget> list = [];
+    for (var i = 0; i < navigationItems.length; i++) {
+      list.add(buildNavigationItem(navigationItems[i]));
+    }
+    return list;
+  }
+
+  Widget buildNavigationItem(NavigationItem item) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedItem = item;
+        });
+      },
+      child: Container(
+        width: 80,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              //padding: EdgeInsets.only(bottom: 50),
+              width: 200,
+              height: 4,
+              color: selectedItem == item
+                  ? Color.fromARGB(255, 0, 151, 178)
+                  : Colors.transparent,
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: 20),
+              child: Column(
+                children: [
+                  Icon(
+                    item.iconData,
+                    color: selectedItem == item
+                        ? Color.fromARGB(255, 0, 151, 178)
+                        : Colors.grey,
+                    size: 38,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 3),
+                    child: Text(
+                      item.title,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: selectedItem == item
+                            ? Color.fromARGB(255, 0, 151, 178)
+                            : Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
