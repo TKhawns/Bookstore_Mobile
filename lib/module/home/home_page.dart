@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:bookstore_mobile/module/home/book_detail.dart';
 import 'package:bookstore_mobile/widget/author_list.dart';
+import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:bookstore_mobile/widget/navigator_item.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -24,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   List<Author> authors = getAuthorList();
   List<NavigationItem> navigationItems = getNavigationItemList();
   NavigationItem selectedItem = NavigationItem(Icons.book, "");
+  List<Book> books = getBookList();
 
   @override
   void initState() {
@@ -124,8 +127,18 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: Container(
-              child: Center(
-                child: Text("Book here"),
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
+                ),
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: buildBooks(),
+                ),
               ),
             ),
           ),
@@ -399,6 +412,72 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> buildBooks() {
+    List<Widget> list = [];
+    for (var i = 0; i < books.length; i++) {
+      list.add(buildBook(books[i], i));
+    }
+    return list;
+  }
+
+  Widget buildBook(Book book, int index) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => BookDetail(book: book)),
+        );
+      },
+      child: Container(
+        margin:
+            EdgeInsets.only(right: 32, left: index == 0 ? 16 : 0, bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 8,
+                      blurRadius: 12,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                margin: EdgeInsets.only(bottom: 16, top: 24),
+                child: Hero(
+                  tag: book.title,
+                  child: Image.asset(
+                    book.image,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
+            ),
+            Text(
+              book.title,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              book.author.fullName,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold),
             ),
           ],
         ),

@@ -71,6 +71,9 @@ flutter:
   assets:
     - assets/images/textlogo.png
     - assets/images/william_shakespear.jpg
+    - assets/images/anonymoust_girl.jpg
+    - assets/images/greer_hendricks.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
