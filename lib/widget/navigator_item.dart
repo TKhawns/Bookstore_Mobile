@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class NavigationItem {
   final String title;
+  final String path;
   final IconData iconData;
-  NavigationItem(this.iconData, this.title);
+  NavigationItem(this.iconData, this.title, this.path);
 }
 
 List<NavigationItem> getNavigationItemList() {
   return <NavigationItem>[
-    NavigationItem(Icons.home_rounded, "Trang chủ "),
-    NavigationItem(Icons.menu_book, "Sách hay"),
-    NavigationItem(Icons.feed, "Mua bán"),
-    NavigationItem(Icons.account_circle_rounded, "Tài khoản"),
+    NavigationItem(Icons.home_rounded, "Trang chủ", "/home"),
+    NavigationItem(Icons.menu_book, "Sách hay", "/hotbook"),
+    NavigationItem(Icons.feed, "Mua bán", "/myshop"),
+    NavigationItem(Icons.account_circle_rounded, "Tài khoản", "/profile"),
   ];
 }

@@ -1,4 +1,6 @@
 import 'package:bookstore_mobile/module/home/home_page.dart';
+import 'package:bookstore_mobile/module/page/hotbook.dart';
+import 'package:bookstore_mobile/module/page/profile.dart';
 import 'package:bookstore_mobile/module/signin/sign_page.dart';
 import 'package:bookstore_mobile/module/signup/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
         "/sign-up": (context) => SignUpPage(),
         "/sign-in": (context) => SignInPage(),
         "/home": (context) => HomePage(),
+        "/hotbook": (context) => HotBook(),
+        "/profile": (context) => MyProfile(),
       },
       //home: SignInPage(),
     );

@@ -1,4 +1,5 @@
 import 'package:bookstore_mobile/base/base_widget.dart';
+import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../widget/normalbutton.dart';
@@ -147,7 +148,11 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
               fontSize: 20, color: const Color.fromARGB(255, 0, 151, 178)),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, "/sign-in");
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => SignInPage()),
+            ModalRoute.withName('/sign-in'),
+          );
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:bookstore_mobile/base/base_widget.dart';
+import 'package:bookstore_mobile/module/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,10 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
             child: NormalButton(
               title: "Đăng nhập",
               onPressed: () {
-                Navigator.pushReplacementNamed(context, "/home");
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
                 return;
               },
             ),
@@ -130,7 +134,7 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
               fontSize: 20, color: const Color.fromARGB(255, 0, 151, 178)),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, "/sign-up");
+          Navigator.pushReplacementNamed(context, "/sign-up");
         },
       ),
     );

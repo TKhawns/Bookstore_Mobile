@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Author> authors = getAuthorList();
   List<NavigationItem> navigationItems = getNavigationItemList();
-  NavigationItem selectedItem = NavigationItem(Icons.book, "");
+  NavigationItem selectedItem = NavigationItem(Icons.book, "", "");
   List<Book> books = getBookList();
 
   @override
@@ -372,6 +372,13 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           selectedItem = item;
         });
+        if (selectedItem.title != "Trang chủ") {
+          Navigator.pushNamed(context, selectedItem.path);
+          selectedItem = navigationItems[0];
+        } else {
+          Navigator.pushReplacementNamed(context, selectedItem.path);
+          return;
+        }
       },
       child: Container(
         width: 80,
