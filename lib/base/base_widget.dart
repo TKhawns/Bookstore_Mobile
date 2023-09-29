@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
-import '../module/signin/sign_page.dart';
+import '../module/signin/signin_page.dart';
 
 class PageContainer extends StatelessWidget {
   final String title;
   final Widget child;
 
-  PageContainer({required this.title, required this.child});
+  final List<SingleChildWidget> bloc;
+  final List<SingleChildWidget> di;
+  //final List<Widget> actions;
+
+  PageContainer({
+    required this.title,
+    required this.child,
+    required this.bloc,
+    required this.di,
+    //required this.actions,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<SignInPage>(
-          create: (_) => SignInPage(),
-        )
+        Provider<SignInPage>(create: (_) => SignInPage()),
+        ...di,
+        ...bloc,
       ],
       child: Scaffold(
         appBar: AppBar(

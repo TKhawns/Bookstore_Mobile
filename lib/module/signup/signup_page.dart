@@ -9,7 +9,8 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageContainer(title: "Sign Up", child: SignUpFormWidget());
+    return PageContainer(
+        title: "Sign Up", di: [], bloc: [], child: SignUpFormWidget());
   }
 }
 

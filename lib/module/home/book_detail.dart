@@ -263,13 +263,21 @@ class BookDetail extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      "Book Official Store",
+                      "Books Store",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 20, right: 10),
+                    padding: EdgeInsets.only(left: 3),
+                    child: Icon(
+                      Icons.verified_rounded,
+                      color: Colors.blue,
+                      size: 20,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 30, right: 10),
                     child: ElevatedButton(
                       onPressed: () => {},
                       style: ElevatedButton.styleFrom(

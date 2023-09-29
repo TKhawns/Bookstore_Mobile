@@ -1,7 +1,7 @@
 import 'package:bookstore_mobile/module/home/home_page.dart';
 import 'package:bookstore_mobile/module/page/hotbook.dart';
 import 'package:bookstore_mobile/module/page/profile.dart';
-import 'package:bookstore_mobile/module/signin/sign_page.dart';
+import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:bookstore_mobile/module/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
@@ -9,6 +9,7 @@ import 'package:device_preview/device_preview.dart';
 void main() {
   runApp(DevicePreview(enabled: true, builder: ((context) => MyApp())));
 }
+// void main() => runApp(MyApp());
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {

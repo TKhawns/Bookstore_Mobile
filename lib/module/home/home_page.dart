@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bookstore_mobile/module/home/book_detail.dart';
+import 'package:bookstore_mobile/module/page/author_profile.dart';
 import 'package:bookstore_mobile/widget/author_list.dart';
 import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:bookstore_mobile/widget/navigator_item.dart';
@@ -157,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Authors to follow",
+                        "Famous Authors",
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -292,68 +293,77 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildAuthor(Author author, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-      ),
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.only(right: 36, left: index == 0 ? 16 : 0),
-      width: 255,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Card(
-            elevation: 4,
-            margin: EdgeInsets.all(0),
-            clipBehavior: Clip.antiAlias,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            child: Container(
-              width: 75,
-              height: 75,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(author.image), fit: BoxFit.cover),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AuthorProfile(author: author)),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        padding: EdgeInsets.all(12),
+        margin: EdgeInsets.only(right: 36, left: index == 0 ? 16 : 0),
+        width: 255,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Card(
+              elevation: 4,
+              margin: EdgeInsets.all(0),
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Container(
+                width: 75,
+                height: 75,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(author.image), fit: BoxFit.cover),
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 12,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                author.fullName,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.library_books,
-                    color: Colors.grey,
-                    size: 18,
-                  ),
-                  SizedBox(
-                    width: 14,
-                    height: 24,
-                  ),
-                  Text(
-                    author.books.toString() + " books",
-                    style: TextStyle(
-                      fontSize: 14,
+            SizedBox(
+              width: 12,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  author.fullName,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.library_books,
                       color: Colors.grey,
-                      fontWeight: FontWeight.bold,
+                      size: 18,
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                    SizedBox(
+                      width: 14,
+                      height: 24,
+                    ),
+                    Text(
+                      author.books.toString() + " books",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
