@@ -71,13 +71,18 @@ class SignInBloc extends BaseBloc {
   }
 
   handleSignIn(event) {
-    SignInEvent e = event as SignInEvent;
-    _userRepo.signIn(e.phone, e.pass).then((userData) {
-      processEventSink.add(SignInSuccessEvent(userData));
-      print(userData);
-    }, onError: (e) {
-      processEventSink.add(SignInFailEvent(e.toString()));
-      print(e);
+    loadingSink.add(true);
+    Future.delayed(Duration(seconds: 0), () {
+      SignInEvent e = event as SignInEvent;
+      _userRepo.signIn(e.phone, e.pass).then((userData) {
+        processEventSink.add(SignInSuccessEvent(userData));
+        loadingSink.add(false);
+        print(userData);
+      }, onError: (e) {
+        loadingSink.add(false);
+        processEventSink.add(SignInFailEvent(e.toString()));
+        print(e);
+      });
     });
   }
 

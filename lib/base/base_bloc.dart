@@ -8,6 +8,9 @@ import 'package:rxdart/rxdart.dart';
 
 abstract class BaseBloc {
   // loading stream here
+  StreamController<bool> _loadingController = StreamController<bool>();
+  Stream<bool> get loadingStream => _loadingController.stream;
+  Sink<bool> get loadingSink => _loadingController.sink;
 
   StreamController<BaseEvent> _eventStreamController =
       StreamController<BaseEvent>();
@@ -34,5 +37,6 @@ abstract class BaseBloc {
     _eventStreamController.close();
     _processEventSubject.close();
     // close loading stream
+    _loadingController.close();
   }
 }

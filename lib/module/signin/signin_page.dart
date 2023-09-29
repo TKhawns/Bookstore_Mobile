@@ -7,6 +7,7 @@ import 'package:bookstore_mobile/module/home/home_page.dart';
 import 'package:bookstore_mobile/module/signin/signin_bloc.dart';
 import 'package:bookstore_mobile/module/signin/signin_fail.dart';
 import 'package:bookstore_mobile/module/signin/signin_success.dart';
+import 'package:bookstore_mobile/widget/loading_task.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -68,61 +69,64 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
       child: Consumer<SignInBloc>(builder: (context, bloc, child) {
         return BlocListener<SignInBloc>(
           listener: handleEvent,
-          child: Container(
-            padding: EdgeInsets.only(right: 25, bottom: 25, left: 25),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Image.asset('assets/images/textlogo.png'),
-                  padding: EdgeInsets.only(bottom: 50),
-                ),
-                Container(
-                  padding: EdgeInsets.only(right: 110, bottom: 30),
-                  child: Text(
-                    "Welcome back",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                        color: const Color.fromARGB(255, 0, 151, 178)),
+          child: LoadingTask(
+            bloc: bloc,
+            child: Container(
+              padding: EdgeInsets.only(right: 25, bottom: 25, left: 25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Image.asset('assets/images/textlogo.png'),
+                    padding: EdgeInsets.only(bottom: 50),
                   ),
-                ),
-                _buildPhoneField(bloc),
-                _buildPassField(bloc),
-                Container(
-                  padding: EdgeInsets.only(
-                      left: 30, right: 30, top: 100, bottom: 30),
-                  child: NormalButton(
-                    title: "Đăng nhập",
-                    onPressed: () {
-                      bloc.event.add(SignInEvent(
-                        phone: _txtPhoneController.text,
-                        pass: _txtPassController.text,
-                      ));
-                      print(SignInEvent(
-                              phone: _txtPhoneController.text,
-                              pass: _txtPassController.text)
-                          .runtimeType);
-                    },
+                  Container(
+                    padding: EdgeInsets.only(right: 110, bottom: 30),
+                    child: Text(
+                      "Welcome back",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: const Color.fromARGB(255, 0, 151, 178)),
+                    ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 30, bottom: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have account ?",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
+                  _buildPhoneField(bloc),
+                  _buildPassField(bloc),
+                  Container(
+                    padding: EdgeInsets.only(
+                        left: 30, right: 30, top: 100, bottom: 30),
+                    child: NormalButton(
+                      title: "Đăng nhập",
+                      onPressed: () {
+                        bloc.event.add(SignInEvent(
+                          phone: _txtPhoneController.text,
+                          pass: _txtPassController.text,
+                        ));
+                        print(SignInEvent(
+                                phone: _txtPhoneController.text,
+                                pass: _txtPassController.text)
+                            .runtimeType);
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 30, bottom: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have account ?",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      _buildFooter()
-                    ],
-                  ),
-                )
-              ],
+                        _buildFooter()
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );
