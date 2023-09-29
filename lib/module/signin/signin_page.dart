@@ -92,23 +92,7 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
                   ),
                   _buildPhoneField(bloc),
                   _buildPassField(bloc),
-                  Container(
-                    padding: EdgeInsets.only(
-                        left: 30, right: 30, top: 100, bottom: 30),
-                    child: NormalButton(
-                      title: "Đăng nhập",
-                      onPressed: () {
-                        bloc.event.add(SignInEvent(
-                          phone: _txtPhoneController.text,
-                          pass: _txtPassController.text,
-                        ));
-                        print(SignInEvent(
-                                phone: _txtPhoneController.text,
-                                pass: _txtPassController.text)
-                            .runtimeType);
-                      },
-                    ),
-                  ),
+                  _buildSignInButton(bloc),
                   Container(
                     padding: EdgeInsets.only(top: 30, bottom: 25),
                     child: Row(
@@ -207,6 +191,29 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
         onPressed: () {
           Navigator.pushReplacementNamed(context, "/sign-up");
         },
+      ),
+    );
+  }
+
+  Widget _buildSignInButton(SignInBloc bloc) {
+    return StreamProvider<bool>.value(
+      initialData: true,
+      value: bloc.btnStream,
+      child: Consumer<bool>(
+        builder: (context, enable, child) => Container(
+          padding: EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 30),
+          child: NormalButton(
+            title: "Đăng nhập",
+            onPressed: enable
+                ? () {
+                    bloc.event.add(SignInEvent(
+                      phone: _txtPhoneController.text,
+                      pass: _txtPassController.text,
+                    ));
+                  }
+                : null,
+          ),
+        ),
       ),
     );
   }

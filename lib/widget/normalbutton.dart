@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NormalButton extends StatelessWidget {
   final String title;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   NormalButton({required this.title, required this.onPressed});
 

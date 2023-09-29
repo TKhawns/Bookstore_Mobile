@@ -72,14 +72,17 @@ class SignInBloc extends BaseBloc {
 
   handleSignIn(event) {
     loadingSink.add(true);
+    btnSink.add(false);
     Future.delayed(Duration(seconds: 0), () {
       SignInEvent e = event as SignInEvent;
       _userRepo.signIn(e.phone, e.pass).then((userData) {
         processEventSink.add(SignInSuccessEvent(userData));
         loadingSink.add(false);
+        btnSink.add(true);
         print(userData);
       }, onError: (e) {
         loadingSink.add(false);
+        btnSink.add(true);
         processEventSink.add(SignInFailEvent(e.toString()));
         print(e);
       });
