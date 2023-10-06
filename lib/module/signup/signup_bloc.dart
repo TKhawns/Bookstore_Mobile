@@ -7,7 +7,7 @@ import '../../base/base_bloc.dart';
 import '../../base/base_event.dart';
 import '../../event/signin_event.dart';
 import '../../event/signup_event.dart';
-import '../../repo/user_repo.dart';
+import '../../repo/user_repository/user_repo.dart';
 import '../../widget/validation.dart';
 
 class SignUpBloc extends BaseBloc {

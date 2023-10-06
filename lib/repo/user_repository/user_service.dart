@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../database/dio_get.dart';
+import '../../database/dio_get.dart';
 
 class UserService {
   Future<Response> signIn(String phone, String pass) async {

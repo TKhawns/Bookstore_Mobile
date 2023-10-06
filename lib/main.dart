@@ -1,4 +1,5 @@
 import 'package:bookstore_mobile/module/home/home_page.dart';
+import 'package:bookstore_mobile/module/page/famous_author.dart';
 import 'package:bookstore_mobile/module/page/hotbook.dart';
 import 'package:bookstore_mobile/module/page/profile.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         "/home": (context) => HomePage(),
         "/hotbook": (context) => HotBook(),
         "/profile": (context) => MyProfile(),
+        "/famous-author": (context) => FamousAuthor(),
       },
       //home: SignInPage(),
     );

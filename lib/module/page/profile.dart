@@ -15,7 +15,7 @@ class _MyProfileState extends State<MyProfile> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Account Information",
+          "My Account",
           style: TextStyle(color: Colors.white, fontSize: 25),
         ),
         backgroundColor: const Color.fromARGB(255, 0, 151, 178),

@@ -10,8 +10,9 @@ import 'package:provider/provider.dart';
 
 import '../../base/base_event.dart';
 import '../../event/signup_event.dart';
-import '../../repo/user_repo.dart';
-import '../../repo/user_service.dart';
+import '../../repo/user_repository/user_repo.dart';
+import '../../repo/user_repository/user_service.dart';
+
 import '../../widget/normalbutton.dart';
 
 class SignUpPage extends StatelessWidget {

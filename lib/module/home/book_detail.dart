@@ -3,6 +3,8 @@ import 'package:bookstore_mobile/widget/shop_info.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
+import '../../repo/book_repository/book_data.dart';
+
 class BookDetail extends StatelessWidget {
   final Book book;
 

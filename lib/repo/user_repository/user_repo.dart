@@ -2,12 +2,12 @@
 
 import 'dart:async';
 
-import 'package:bookstore_mobile/repo/user_data.dart';
-import 'package:bookstore_mobile/repo/user_service.dart';
+import 'package:bookstore_mobile/repo/user_repository/user_data.dart';
+import 'package:bookstore_mobile/repo/user_repository/user_service.dart';
 import 'package:dio/dio.dart';
 
-import '../database/constant.dart';
-import '../database/spref.dart';
+import '../../database/constant.dart';
+import '../../database/spref.dart';
 
 class UserRepo {
   UserService _userService;

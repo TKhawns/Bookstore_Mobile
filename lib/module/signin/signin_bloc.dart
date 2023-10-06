@@ -7,7 +7,7 @@ import 'package:bookstore_mobile/event/signup_event.dart';
 import 'package:bookstore_mobile/module/signin/signin_fail.dart';
 import 'package:bookstore_mobile/module/signin/signin_success.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../repo/user_repo.dart';
+import '../../repo/user_repository/user_repo.dart';
 import '../../widget/validation.dart';
 
 class SignInBloc extends BaseBloc {

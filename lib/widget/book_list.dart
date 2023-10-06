@@ -1,3 +1,5 @@
+import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
+import 'package:bookstore_mobile/repo/book_repository/book_repo.dart';
 import 'package:bookstore_mobile/widget/author_list.dart';
 
 class Book {
@@ -23,6 +25,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.0",
         "assets/images/anonymoust_girl.jpg",
@@ -36,6 +39,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.14",
         "assets/images/anonymoust_girl.jpg",
@@ -49,6 +53,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.14",
         "assets/images/anonymoust_girl.jpg",
@@ -62,6 +67,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.14",
         "assets/images/anonymoust_girl.jpg",
@@ -75,6 +81,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.14",
         "assets/images/anonymoust_girl.jpg",
@@ -88,6 +95,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.14",
         "assets/images/anonymoust_girl.jpg",
@@ -101,6 +109,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.14",
         "assets/images/anonymoust_girl.jpg",
@@ -114,6 +123,7 @@ List<Book> getBookList() {
           "Greer Hendricks",
           90,
           "assets/images/greer_hendricks.jpg",
+          "William Shakespeare là một nhà văn và nhà viết kịch Anh, được coi là nhà văn vĩ đại nhất của Anh và là nhà viết kịch đi trước thời đại. Ông còn được vinh danh là nhà thơ tiêu biểu của nước Anh và là Thi sĩ của dòng sông Avon.",
         ),
         "4.14",
         "assets/images/anonymoust_girl.jpg",

@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../event/signin_event.dart';
-import '../../repo/user_repo.dart';
-import '../../repo/user_service.dart';
+import '../../repo/user_repository/user_repo.dart';
+import '../../repo/user_repository/user_service.dart';
 import '../../widget/bloc_listener.dart';
 import '../../widget/normalbutton.dart';
 
