@@ -159,13 +159,7 @@ class _HomePageState extends State<HomePage> {
                       PointerDeviceKind.mouse,
                     },
                   ),
-                  child: ListView(
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    children: buildBooks(),
-                    //children: newBuildBooks(),
-                    //children: <Widget>[newBuild(context)],
-                  ),
+                  child: BookListWidget(),
                 ),
               ),
             ),
@@ -537,15 +531,17 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
 
-  Widget newBuild(BuildContext context) {
+class BookListWidget extends StatelessWidget {
+  List<BookData> bookData = [];
+  Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(bookRepo: Provider.of(context)),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
             print("Title: ${book.title}");
-            //books.add(book);
             bookData.add(book);
           }
         });
@@ -563,7 +559,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }
-              return newbuildBook(data[0], 0);
+
+              return ListView(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                children: newBuildBooks(bookData),
+              );
             },
           ),
         );
@@ -571,11 +572,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  List<Widget> newBuildBooks(List<BookData> data) {
+    List<Widget> list = [];
+    for (var i = 0; i < data.length; i++) {
+      list.add(newbuildBook(data[i], i));
+    }
+    return list;
+  }
+
   Widget newbuildBook(BookData bookData, int index) {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        margin: EdgeInsets.only(right: 32, left: 0, bottom: 8),
+        margin:
+            EdgeInsets.only(right: 32, left: index == 0 ? 16 : 0, bottom: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -596,7 +606,7 @@ class _HomePageState extends State<HomePage> {
                 child: Hero(
                   tag: '${bookData.title}',
                   child: Image.asset(
-                    'assets/images/greer_hendricks.jpg',
+                    "assets/images/${bookData.image}",
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -611,7 +621,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Text(
-              "Khanh",
+              "Tac gia",
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,

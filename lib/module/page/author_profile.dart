@@ -1,7 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'dart:js';
-
 import 'package:bookstore_mobile/widget/author_list.dart';
 import 'package:flutter/material.dart';
 

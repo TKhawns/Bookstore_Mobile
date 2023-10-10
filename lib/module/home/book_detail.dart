@@ -1,9 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bookstore_mobile/widget/book_list.dart';
-import 'package:bookstore_mobile/widget/shop_info.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
-
-import '../../repo/book_repository/book_data.dart';
 
 class BookDetail extends StatelessWidget {
   final Book book;
@@ -324,6 +323,59 @@ class BookDetail extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 8,
+              blurRadius: 12,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Container(
+            padding: EdgeInsets.only(left: 0, right: 45),
+            child: Container(
+              padding: EdgeInsets.only(left: 45),
+              child: Icon(
+                Icons.forward_to_inbox_rounded,
+                color: Colors.red,
+                size: 30,
+              ),
+            ),
+          ),
+          Container(
+            height: 30,
+            color: Colors.black,
+            width: 1,
+          ),
+          Container(
+            child: Container(
+              padding: EdgeInsets.only(left: 45, right: 45),
+              child: Icon(
+                Icons.add_shopping_cart_outlined,
+                color: Colors.red,
+                size: 30,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.red,
+              child: Center(
+                child: Text(
+                  "Buy now",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ]),
       ),
     );
   }
