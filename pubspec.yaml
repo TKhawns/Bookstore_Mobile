@@ -55,6 +55,8 @@ dev_dependencies:
   rxdart: ^0.27.7
   dio: ^5.3.3
   flutter_spinkit: ^5.2.0
+  video_player: ^2.7.2
+  flick_video_player: ^0.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -83,6 +85,8 @@ flutter:
     - assets/images/ditimlesong.jpg
     - assets/images/nguoiduadieu.jpg
     - assets/images/contentbacty.jpg
+
+    - assets/videos/WilliamShakespeare.mp4
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables
+// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, must_be_immutable
 
 import 'dart:ui';
 
@@ -7,6 +7,8 @@ import 'package:bookstore_mobile/module/home/book_detail.dart';
 import 'package:bookstore_mobile/module/home/home_bloc.dart';
 import 'package:bookstore_mobile/module/page/author_profile.dart';
 import 'package:bookstore_mobile/module/page/famous_author.dart';
+import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
+import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_repo.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_service.dart';
 import 'package:bookstore_mobile/widget/author_list.dart';
@@ -17,6 +19,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
+import '../../repo/author_repository/author_data.dart';
 import '../../repo/book_repository/book_data.dart';
 import '../../widget/filter_widget.dart';
 
@@ -30,14 +33,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _txtSearchTextController =
       TextEditingController();
+
   List<Filter> filters = getFilterList();
   Filter selectedFilter = Filter("");
-
   List<Author> authors = getAuthorList();
   List<NavigationItem> navigationItems = getNavigationItemList();
   NavigationItem selectedItem = NavigationItem(Icons.book, "", "");
-
-  List<Book> books = getBookList();
+  //List<Book> books = getBookList();
   List<BookData> bookData = [];
 
   @override
@@ -63,6 +65,13 @@ class _HomePageState extends State<HomePage> {
           update: (context, bookService, previous) =>
               BookRepo(bookService: bookService),
         ),
+        Provider.value(
+          value: AuthorService(),
+        ),
+        ProxyProvider<AuthorService, AuthorRepo>(
+          update: (context, authorService, previous) =>
+              AuthorRepo(authorService: authorService),
+        )
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -226,11 +235,7 @@ class _HomePageState extends State<HomePage> {
                           PointerDeviceKind.mouse,
                         },
                       ),
-                      child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        children: buildAuthors(),
-                      ),
+                      child: AuthorListWidget(),
                     ),
                   ),
                 ],
@@ -314,89 +319,89 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> buildAuthors() {
-    List<Widget> list = [];
-    for (var i = 0; i < authors.length; i++) {
-      list.add(buildAuthor(authors[i], i));
-    }
-    return list;
-  }
+  // List<Widget> buildAuthors() {
+  //   List<Widget> list = [];
+  //   for (var i = 0; i < authors.length; i++) {
+  //     list.add(buildAuthor(authors[i], i));
+  //   }
+  //   return list;
+  // }
 
-  Widget buildAuthor(Author author, int index) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AuthorProfile(author: author)),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-        ),
-        padding: EdgeInsets.all(12),
-        margin: EdgeInsets.only(right: 36, left: index == 0 ? 16 : 0),
-        width: 255,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Card(
-              elevation: 4,
-              margin: EdgeInsets.all(0),
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Container(
-                width: 75,
-                height: 75,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(author.image), fit: BoxFit.cover),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 12,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  author.fullName,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.library_books,
-                      color: Colors.grey,
-                      size: 18,
-                    ),
-                    SizedBox(
-                      width: 14,
-                      height: 24,
-                    ),
-                    Text(
-                      author.books.toString() + " books",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget buildAuthor(Author author, int index) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => AuthorProfile(author: author)),
+  //       );
+  //     },
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey[200],
+  //         borderRadius: BorderRadius.all(Radius.circular(15)),
+  //       ),
+  //       padding: EdgeInsets.all(12),
+  //       margin: EdgeInsets.only(right: 36, left: index == 0 ? 16 : 0),
+  //       width: 255,
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.start,
+  //         children: [
+  //           Card(
+  //             elevation: 4,
+  //             margin: EdgeInsets.all(0),
+  //             clipBehavior: Clip.antiAlias,
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.all(Radius.circular(15)),
+  //             ),
+  //             child: Container(
+  //               width: 75,
+  //               height: 75,
+  //               decoration: BoxDecoration(
+  //                 image: DecorationImage(
+  //                     image: AssetImage(author.image), fit: BoxFit.cover),
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             width: 12,
+  //           ),
+  //           Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 author.fullName,
+  //                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  //               ),
+  //               Row(
+  //                 children: [
+  //                   Icon(
+  //                     Icons.library_books,
+  //                     color: Colors.grey,
+  //                     size: 18,
+  //                   ),
+  //                   SizedBox(
+  //                     width: 14,
+  //                     height: 24,
+  //                   ),
+  //                   Text(
+  //                     author.books.toString() + " books",
+  //                     style: TextStyle(
+  //                       fontSize: 14,
+  //                       color: Colors.grey,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   List<Widget> buildNavigationItems() {
     List<Widget> list = [];
@@ -465,79 +470,14 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  List<Widget> buildBooks() {
-    List<Widget> list = [];
-    for (var i = 0; i < books.length; i++) {
-      list.add(buildBook(books[i], i));
-    }
-    return list;
-  }
-
-  Widget buildBook(Book book, int index) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BookDetail(book: book)),
-        );
-      },
-      child: Container(
-        margin:
-            EdgeInsets.only(right: 32, left: index == 0 ? 16 : 0, bottom: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 8,
-                      blurRadius: 12,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                margin: EdgeInsets.only(bottom: 16, top: 24),
-                child: Hero(
-                  tag: book.title,
-                  child: Image.asset(
-                    book.image,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ),
-            ),
-            Text(
-              book.title,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              book.author.fullName,
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class BookListWidget extends StatelessWidget {
   List<BookData> bookData = [];
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
-      value: HomeBloc.getInstance(bookRepo: Provider.of(context)),
+      value: HomeBloc.getInstance(
+          bookRepo: Provider.of(context), authorRepo: Provider.of(context)),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
@@ -563,7 +503,7 @@ class BookListWidget extends StatelessWidget {
               return ListView(
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                children: newBuildBooks(bookData),
+                children: newBuildBooks(bookData, context),
               );
             },
           ),
@@ -572,17 +512,23 @@ class BookListWidget extends StatelessWidget {
     );
   }
 
-  List<Widget> newBuildBooks(List<BookData> data) {
+  List<Widget> newBuildBooks(List<BookData> data, BuildContext context) {
     List<Widget> list = [];
     for (var i = 0; i < data.length; i++) {
-      list.add(newbuildBook(data[i], i));
+      list.add(newbuildBook(data[i], i, context));
     }
     return list;
   }
 
-  Widget newbuildBook(BookData bookData, int index) {
+  Widget newbuildBook(BookData bookData, int index, BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BookDetail(bookData: bookData)),
+        );
+      },
       child: Container(
         margin:
             EdgeInsets.only(right: 32, left: index == 0 ? 16 : 0, bottom: 8),
@@ -621,11 +567,137 @@ class BookListWidget extends StatelessWidget {
               ),
             ),
             Text(
-              "Tac gia",
+              bookData.authorName,
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
                   fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AuthorListWidget extends StatelessWidget {
+  List<AuthorData> authorData = [];
+  Widget build(BuildContext context) {
+    return Provider<HomeBloc?>.value(
+      value: HomeBloc.getInstance(
+          bookRepo: Provider.of(context), authorRepo: Provider.of(context)),
+      child: Consumer<HomeBloc>(builder: (context, bloc, child) {
+        bloc.getAuthorList().listen((event) {
+          for (var author in event) {
+            print("Title: ${author.full_name}");
+            authorData.add(author);
+          }
+        });
+        return StreamProvider<List<AuthorData>?>.value(
+          initialData: authorData,
+          value: bloc.getAuthorList(),
+          child: Consumer<List<AuthorData>?>(
+            builder: (context, data, child) {
+              print("data: $data");
+
+              if (data == null) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.yellow,
+                  ),
+                );
+              }
+
+              return ListView(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                children: newBuildAuthors(authorData, context),
+              );
+            },
+          ),
+        );
+      }),
+    );
+  }
+
+  List<Widget> newBuildAuthors(List<AuthorData> data, BuildContext context) {
+    List<Widget> list = [];
+    for (var i = 0; i < data.length; i++) {
+      list.add(newBuildAuthor(data[i], i, context));
+    }
+    return list;
+  }
+
+  Widget newBuildAuthor(AuthorData author, int index, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AuthorProfile(author: author)),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        padding: EdgeInsets.all(12),
+        margin: EdgeInsets.only(right: 36, left: index == 0 ? 16 : 0),
+        width: 255,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Card(
+              elevation: 4,
+              margin: EdgeInsets.all(0),
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Container(
+                width: 75,
+                height: 75,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: NetworkImage(author.image),
+                  fit: BoxFit.cover,
+                )),
+              ),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  author.full_name,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.library_books,
+                      color: Colors.grey,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 14,
+                      height: 24,
+                    ),
+                    Text(
+                      author.number_books.toString() + " books",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

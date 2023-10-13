@@ -1,18 +1,50 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:bookstore_mobile/module/page/chatshop.dart';
+import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
-class BookDetail extends StatelessWidget {
-  final Book book;
+class BookDetail extends StatefulWidget {
+  //final Book book;
+  final BookData bookData;
 
-  BookDetail({required this.book});
+  BookDetail({required this.bookData});
+
+  @override
+  State<BookDetail> createState() => _BookDetailState();
+}
+
+class _BookDetailState extends State<BookDetail> {
+  Color myColor = Colors.white;
+  Color myColorAdd = Colors.white;
+  void _updateColor(PointerEvent details) {
+    setState(() {
+      myColor = Colors.grey.shade300;
+    });
+  }
+
+  void _updateColorAdd(PointerEvent details) {
+    setState(() {
+      myColorAdd = Colors.grey.shade300;
+    });
+  }
+
+  void _onExit(PointerEvent details) {
+    setState(() {
+      myColor = Colors.white;
+    });
+  }
+
+  void _onExitAdd(PointerEvent details) {
+    setState(() {
+      myColorAdd = Colors.white;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -46,7 +78,7 @@ class BookDetail extends StatelessWidget {
               height: size.height * 0.5,
               width: size.width,
               child: FittedBox(
-                child: Image.asset(book.image),
+                child: Image.asset("assets/images/${widget.bookData.image}"),
                 fit: BoxFit.fill,
               ),
             ),
@@ -73,7 +105,7 @@ class BookDetail extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.only(right: 100, left: 10),
                             child: Text(
-                              book.cost,
+                              widget.bookData.cost,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 21,
@@ -104,7 +136,9 @@ class BookDetail extends StatelessWidget {
                       ),
                       Container(
                         padding: EdgeInsets.only(right: 200),
-                        child: Text("Number of books: " + book.count.toString(),
+                        child: Text(
+                            "Number of books: " +
+                                widget.bookData.count.toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 17,
@@ -127,7 +161,7 @@ class BookDetail extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(top: 10, left: 10),
                       child: Text(
-                        book.title,
+                        widget.bookData.title,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 22,
@@ -166,7 +200,7 @@ class BookDetail extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
-                              book.score,
+                              widget.bookData.score,
                               style:
                                   TextStyle(fontSize: 22, color: Colors.black),
                             ),
@@ -231,7 +265,7 @@ class BookDetail extends StatelessWidget {
                     size: 40,
                   ),
                   Text(
-                    "  Ship cost: " + book.shipCost,
+                    "  Ship cost: " + widget.bookData.shipCost,
                     style: TextStyle(
                         fontSize: 20,
                         color: Colors.black,
@@ -259,7 +293,8 @@ class BookDetail extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 35, // Image radius
-                    backgroundImage: AssetImage(book.image),
+                    backgroundImage:
+                        AssetImage("assets/images/${widget.bookData.image}"),
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 10),
@@ -314,7 +349,7 @@ class BookDetail extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(15),
                     child: Text(
-                      book.description,
+                      widget.bookData.description,
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -338,14 +373,28 @@ class BookDetail extends StatelessWidget {
           ],
         ),
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Container(
-            padding: EdgeInsets.only(left: 0, right: 45),
-            child: Container(
-              padding: EdgeInsets.only(left: 45),
-              child: Icon(
-                Icons.forward_to_inbox_rounded,
-                color: Colors.red,
-                size: 30,
+          MouseRegion(
+            onHover: _updateColor,
+            onExit: _onExit,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatShopPage()),
+                );
+              },
+              child: Container(
+                color: myColor,
+                height: 60,
+                padding: EdgeInsets.only(left: 0, right: 45),
+                child: Container(
+                  padding: EdgeInsets.only(left: 45),
+                  child: Icon(
+                    Icons.forward_to_inbox_rounded,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                ),
               ),
             ),
           ),
@@ -354,13 +403,19 @@ class BookDetail extends StatelessWidget {
             color: Colors.black,
             width: 1,
           ),
-          Container(
+          MouseRegion(
+            onHover: _updateColorAdd,
+            onExit: _onExitAdd,
             child: Container(
-              padding: EdgeInsets.only(left: 45, right: 45),
-              child: Icon(
-                Icons.add_shopping_cart_outlined,
-                color: Colors.red,
-                size: 30,
+              height: 60,
+              color: myColorAdd,
+              child: Container(
+                padding: EdgeInsets.only(left: 45, right: 45),
+                child: Icon(
+                  Icons.add_shopping_cart_outlined,
+                  color: Colors.red,
+                  size: 30,
+                ),
               ),
             ),
           ),

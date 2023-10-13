@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:flutter/material.dart';
 

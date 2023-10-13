@@ -7,6 +7,7 @@ class BookData {
   String cost;
   int count;
   String shipCost;
+  String authorName;
 
   BookData(
       {required this.book_id,
@@ -16,7 +17,8 @@ class BookData {
       required this.image,
       required this.cost,
       required this.count,
-      required this.shipCost});
+      required this.shipCost,
+      required this.authorName});
 
   static List<BookData> parseBookDataList(map) {
     var list = map["data"] as List;
@@ -25,15 +27,15 @@ class BookData {
 
   factory BookData.fromJson(Map<String, dynamic> map) {
     return BookData(
-      book_id: int.parse(map["book_id"].toString()),
-      title: map["title"],
-      description: map["description"],
-      score: map["score"],
-      image: map["image"],
-      cost: map["price"],
-      count: int.parse(map["number_books"].toString()),
-      shipCost: map["shipcost"],
-    );
+        book_id: int.parse(map["book_id"].toString()),
+        title: map["title"],
+        description: map["description"],
+        score: map["score"],
+        image: map["image"],
+        cost: map["price"],
+        count: int.parse(map["number_books"].toString()),
+        shipCost: map["shipcost"],
+        authorName: map['authorname']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -44,5 +46,6 @@ class BookData {
         "price": cost,
         "number_books": count,
         "shipcost": shipCost,
+        "authorname": authorName,
       };
 }

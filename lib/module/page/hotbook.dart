@@ -1,10 +1,20 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:ui';
 
+import 'package:bookstore_mobile/module/page/mycart.dart';
+import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
+import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
+import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
+import 'package:provider/provider.dart';
 import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
+import '../../repo/book_repository/book_repo.dart';
+import '../../repo/book_repository/book_service.dart';
 import '../home/book_detail.dart';
+import '../home/home_bloc.dart';
 
 class HotBook extends StatefulWidget {
   const HotBook({super.key});
@@ -15,60 +25,119 @@ class HotBook extends StatefulWidget {
 
 class _HotBookState extends State<HotBook> {
   List<Book> books = getBookList();
+  List<BookData> bookData = [];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "Hot Books",
-          style: TextStyle(color: Colors.white, fontSize: 25),
+    return MultiProvider(
+      providers: [
+        Provider<HotBook>(
+          create: (_) => HotBook(),
         ),
-        backgroundColor: const Color.fromARGB(255, 0, 151, 178),
-        actions: [
-          Container(
-              margin: EdgeInsets.only(top: 15, right: 30),
-              child: badges.Badge(
-                badgeContent: Text(
-                  '1',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+        Provider.value(
+          value: BookService(),
+        ),
+        ProxyProvider<BookService, BookRepo>(
+          update: (context, bookService, previous) =>
+              BookRepo(bookService: bookService),
+        ),
+        Provider.value(
+          value: AuthorService(),
+        ),
+        ProxyProvider<AuthorService, AuthorRepo>(
+          update: (context, authorService, previous) =>
+              AuthorRepo(authorService: authorService),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Hot Books",
+            style: TextStyle(color: Colors.white, fontSize: 25),
+          ),
+          backgroundColor: const Color.fromARGB(255, 0, 151, 178),
+          actions: [
+            Container(
+                margin: EdgeInsets.only(top: 15, right: 30),
+                child: badges.Badge(
+                  badgeContent: Text(
+                    '1',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                child: Icon(
-                  Icons.shopping_cart,
-                  size: 30,
-                ),
-              )),
-        ],
-      ),
-      body: ScrollConfiguration(
-        behavior: ScrollConfiguration.of(context).copyWith(
-          dragDevices: {
-            PointerDeviceKind.touch,
-            PointerDeviceKind.mouse,
-          },
+                  child: Icon(
+                    Icons.shopping_cart,
+                    size: 30,
+                  ),
+                )),
+          ],
         ),
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          children: buildListBooks(),
+        body: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+            },
+          ),
+          child: BookListWidget(),
         ),
       ),
     );
   }
+}
 
-  List<Widget> buildListBooks() {
+class BookListWidget extends StatelessWidget {
+  List<BookData> bookData = [];
+  ShoppingCart updatebooks = ShoppingCart();
+
+  Widget build(BuildContext context) {
+    return Provider<HomeBloc?>.value(
+      value: HomeBloc.getInstance(
+          bookRepo: Provider.of(context), authorRepo: Provider.of(context)),
+      child: Consumer<HomeBloc>(builder: (context, bloc, child) {
+        bloc.getBookList().listen((event) {
+          for (var book in event) {
+            print("Title: ${book.title}");
+            bookData.add(book);
+          }
+        });
+        return StreamProvider<List<BookData>?>.value(
+          initialData: bookData,
+          value: bloc.getBookList(),
+          child: Consumer<List<BookData>?>(
+            builder: (context, data, child) {
+              print("data: $data");
+
+              if (data == null) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.yellow,
+                  ),
+                );
+              }
+
+              return ListView(
+                children: newBuildBooks(bookData, context),
+              );
+            },
+          ),
+        );
+      }),
+    );
+  }
+
+  List<Widget> newBuildBooks(List<BookData> data, BuildContext context) {
     List<Widget> list = [];
-    for (var i = 0; i < books.length; i++) {
-      list.add(buildListBook(books[i]));
+    for (var i = 0; i < data.length; i++) {
+      list.add(newbuildBook(data[i], i, context));
     }
     return list;
   }
 
-  Widget buildListBook(Book book) {
+  Widget newbuildBook(BookData book, int index, BuildContext context) {
     return Container(
       height: 180,
       child: Card(
@@ -83,13 +152,13 @@ class _HotBookState extends State<HotBook> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BookDetail(book: book)),
+                        builder: (context) => BookDetail(bookData: book)),
                   );
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    book.image,
+                    "assets/images/${book.image}",
                     width: 100,
                     height: 150,
                   ),

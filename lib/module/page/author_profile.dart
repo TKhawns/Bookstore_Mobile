@@ -1,10 +1,29 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:bookstore_mobile/widget/author_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flick_video_player/flick_video_player.dart';
+import 'package:video_player/video_player.dart';
 
-class AuthorProfile extends StatelessWidget {
-  final Author author;
+import '../../repo/author_repository/author_data.dart';
+
+class AuthorProfile extends StatefulWidget {
+  final AuthorData author;
   AuthorProfile({required this.author});
+
+  @override
+  State<AuthorProfile> createState() => _AuthorProfileState();
+}
+
+class _AuthorProfileState extends State<AuthorProfile> {
+  final FlickManager flickManager = FlickManager(
+      autoPlay: false,
+      videoPlayerController:
+          VideoPlayerController.asset("assets/videos/WilliamShakespeare.mp4"));
+
+  @override
+  void dispose() {
+    flickManager.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +40,14 @@ class AuthorProfile extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Image.asset(
-            author.image,
-            fit: BoxFit.fitWidth,
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: FlickVideoPlayer(flickManager: flickManager),
           ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: size.height * 0.6,
+              height: size.height * 0.6 - 30,
               padding: EdgeInsets.only(top: 64),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -44,7 +63,7 @@ class AuthorProfile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            author.fullName,
+                            widget.author.full_name,
                             style: TextStyle(
                                 fontSize: 28,
                                 height: 1,
@@ -57,7 +76,7 @@ class AuthorProfile extends StatelessWidget {
                             child: SingleChildScrollView(
                               physics: BouncingScrollPhysics(),
                               child: Text(
-                                author.description,
+                                widget.author.description,
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),
@@ -76,7 +95,7 @@ class AuthorProfile extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             child: Padding(
               padding:
-                  EdgeInsets.only(left: 32, bottom: size.height * 0.6 - 75 / 2),
+                  EdgeInsets.only(left: 32, bottom: size.height * 0.6 - 75),
               child: Card(
                 elevation: 4,
                 margin: EdgeInsets.all(0),
@@ -89,7 +108,7 @@ class AuthorProfile extends StatelessWidget {
                   height: 75,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(author.image),
+                      image: NetworkImage(widget.author.image),
                       fit: BoxFit.cover,
                     ),
                   ),
