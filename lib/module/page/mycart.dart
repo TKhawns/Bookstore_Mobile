@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../repo/book_repository/book_data.dart';
 
-class ShoppingCart extends StatelessWidget {
+class MyShoppingCart extends StatelessWidget {
   final List<BookData> books_cart = [];
 
   void addbooks(BookData book) {

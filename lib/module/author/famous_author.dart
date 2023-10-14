@@ -94,7 +94,9 @@ class AuthorListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context), authorRepo: Provider.of(context)),
+          bookRepo: Provider.of(context),
+          orderRepo: Provider.of(context),
+          authorRepo: Provider.of(context)),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getAuthorList().listen((event) {
           for (var author in event) {
@@ -106,7 +108,7 @@ class AuthorListWidget extends StatelessWidget {
           value: bloc.getAuthorList(),
           child: Consumer<List<AuthorData>?>(
             builder: (context, data, child) {
-              if (data == null) {
+              if (data!.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(
                     backgroundColor: Colors.yellow,

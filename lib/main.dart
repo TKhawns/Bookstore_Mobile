@@ -1,7 +1,8 @@
 import 'package:bookstore_mobile/module/home/home_page.dart';
-import 'package:bookstore_mobile/module/page/famous_author.dart';
-import 'package:bookstore_mobile/module/page/hotbook.dart';
+import 'package:bookstore_mobile/module/author/famous_author.dart';
+import 'package:bookstore_mobile/module/book/hotbook.dart';
 import 'package:bookstore_mobile/module/page/profile.dart';
+import 'package:bookstore_mobile/module/search/search_view.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:bookstore_mobile/module/signup/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         "/hotbook": (context) => HotBook(),
         "/profile": (context) => MyProfile(),
         "/famous-author": (context) => FamousAuthor(),
+        "/search_view": (context) => SearchView(),
       },
       //home: SignInPage(),
     );

@@ -12,10 +12,12 @@ abstract class BaseBloc {
   Stream<bool> get loadingStream => _loadingController.stream;
   Sink<bool> get loadingSink => _loadingController.sink;
 
+  // event stream here
   StreamController<BaseEvent> _eventStreamController =
       StreamController<BaseEvent>();
   Sink<BaseEvent> get event => _eventStreamController.sink;
 
+  // process stream here
   StreamController<BaseEvent> _processEventSubject =
       BehaviorSubject<BaseEvent>();
   Stream<BaseEvent> get processEventStream => _processEventSubject.stream;

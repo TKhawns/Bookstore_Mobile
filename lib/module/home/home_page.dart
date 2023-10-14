@@ -1,19 +1,25 @@
-// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, must_be_immutable
+// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, must_be_immutable, unnecessary_null_comparison
 
 import 'dart:ui';
 
 import 'package:bookstore_mobile/base/base_widget.dart';
 import 'package:bookstore_mobile/module/home/book_detail.dart';
 import 'package:bookstore_mobile/module/home/home_bloc.dart';
-import 'package:bookstore_mobile/module/page/author_profile.dart';
-import 'package:bookstore_mobile/module/page/famous_author.dart';
+import 'package:bookstore_mobile/module/author/author_profile.dart';
+import 'package:bookstore_mobile/module/author/famous_author.dart';
+import 'package:bookstore_mobile/module/search/search_book_bloc.dart';
+import 'package:bookstore_mobile/module/search/search_view.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_repo.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_service.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/widget/author_list.dart';
+import 'package:bookstore_mobile/widget/bloc_listener.dart';
 import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:bookstore_mobile/widget/navigator_item.dart';
+import 'package:bookstore_mobile/widget/shop_info.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/rendering.dart';
@@ -22,10 +28,10 @@ import 'package:provider/provider.dart';
 import '../../repo/author_repository/author_data.dart';
 import '../../repo/book_repository/book_data.dart';
 import '../../widget/filter_widget.dart';
+import '../../widget/shopping_cart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -39,8 +45,9 @@ class _HomePageState extends State<HomePage> {
   List<Author> authors = getAuthorList();
   List<NavigationItem> navigationItems = getNavigationItemList();
   NavigationItem selectedItem = NavigationItem(Icons.book, "", "");
-  //List<Book> books = getBookList();
   List<BookData> bookData = [];
+
+  SearchBookBloc searchBloc = SearchBookBloc();
 
   @override
   void initState() {
@@ -71,7 +78,12 @@ class _HomePageState extends State<HomePage> {
         ProxyProvider<AuthorService, AuthorRepo>(
           update: (context, authorService, previous) =>
               AuthorRepo(authorService: authorService),
-        )
+        ),
+        Provider.value(value: OrderService()),
+        ProxyProvider<OrderService, OrderRepo>(
+          update: (context, orderService, previous) =>
+              OrderRepo(orderService: orderService),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -81,6 +93,9 @@ class _HomePageState extends State<HomePage> {
             height: 40,
             child: TextField(
               controller: _txtSearchTextController,
+              onTap: () {
+                Navigator.pushNamed(context, "/search_view");
+              },
               cursorColor: Colors.black,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
@@ -98,21 +113,25 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           actions: [
-            Container(
-                margin: EdgeInsets.only(top: 15, right: 30),
-                child: badges.Badge(
-                  badgeContent: Text(
-                    '1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.shopping_cart,
-                    size: 30,
-                  ),
-                )),
+            ShoppingCartWidget(),
+            // Container(
+            //     margin: EdgeInsets.only(top: 15, right: 30),
+            //     child: badges.Badge(
+            //       badgeContent: Text(
+            //         "0",
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       child: GestureDetector(
+            //         onTap: () {},
+            //         child: Icon(
+            //           Icons.shopping_cart,
+            //           size: 30,
+            //         ),
+            //       ),
+            //     )),
           ],
         ),
         body: Column(
@@ -477,7 +496,9 @@ class BookListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context), authorRepo: Provider.of(context)),
+          bookRepo: Provider.of(context),
+          orderRepo: Provider.of(context),
+          authorRepo: Provider.of(context)),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
@@ -492,7 +513,7 @@ class BookListWidget extends StatelessWidget {
             builder: (context, data, child) {
               print("data: $data");
 
-              if (data == null) {
+              if (data!.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(
                     backgroundColor: Colors.yellow,
@@ -585,7 +606,9 @@ class AuthorListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context), authorRepo: Provider.of(context)),
+          bookRepo: Provider.of(context),
+          orderRepo: Provider.of(context),
+          authorRepo: Provider.of(context)),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getAuthorList().listen((event) {
           for (var author in event) {
@@ -600,7 +623,7 @@ class AuthorListWidget extends StatelessWidget {
             builder: (context, data, child) {
               print("data: $data");
 
-              if (data == null) {
+              if (data!.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(
                     backgroundColor: Colors.yellow,
@@ -702,6 +725,87 @@ class AuthorListWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ShoppingCartWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Provider<HomeBloc?>.value(
+      value: HomeBloc.getInstance(
+        bookRepo: Provider.of(context),
+        orderRepo: Provider.of(context),
+        authorRepo: Provider.of(context),
+      ),
+      child: CartWidget(),
+    );
+  }
+}
+
+class CartWidget extends StatefulWidget {
+  @override
+  _CartWidgetState createState() => _CartWidgetState();
+}
+
+class _CartWidgetState extends State<CartWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    var bloc = Provider.of<HomeBloc>(context);
+    bloc.getShoppingCartInfo();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ShoppingCart count = ShoppingCart(total: 0);
+    return Consumer<HomeBloc>(
+      builder: (context, bloc, child) {
+        bloc.shoppingCartStream.listen((event) {
+          count.total = event.total;
+        });
+        return StreamProvider<ShoppingCart>.value(
+          initialData: count,
+          value: bloc.shoppingCartStream,
+          catchError: (context, error) {
+            print(error);
+            return ShoppingCart(total: -1);
+          },
+          child: Consumer<ShoppingCart>(
+            builder: (context, value, child) {
+              if (value == null) {
+                return Container(
+                  margin: EdgeInsets.only(top: 15, right: 20),
+                  child: Icon(Icons.shopping_cart),
+                );
+              }
+              var cart = value;
+              return GestureDetector(
+                onTap: () {},
+                child: Container(
+                  margin: EdgeInsets.only(top: 15, right: 20),
+                  child: badges.Badge(
+                    badgeContent: Text(
+                      "${cart.total}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: Icon(Icons.shopping_cart),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

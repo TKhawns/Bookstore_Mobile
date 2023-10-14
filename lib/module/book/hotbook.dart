@@ -2,10 +2,11 @@
 
 import 'dart:ui';
 
-import 'package:bookstore_mobile/module/page/mycart.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:provider/provider.dart';
 import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,13 @@ class _HotBookState extends State<HotBook> {
         ProxyProvider<AuthorService, AuthorRepo>(
           update: (context, authorService, previous) =>
               AuthorRepo(authorService: authorService),
+        ),
+        Provider.value(
+          value: OrderService(),
+        ),
+        ProxyProvider<OrderService, OrderRepo>(
+          update: (context, orderService, previous) =>
+              OrderRepo(orderService: orderService),
         ),
       ],
       child: Scaffold(
@@ -91,12 +99,14 @@ class _HotBookState extends State<HotBook> {
 
 class BookListWidget extends StatelessWidget {
   List<BookData> bookData = [];
-  ShoppingCart updatebooks = ShoppingCart();
 
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context), authorRepo: Provider.of(context)),
+        bookRepo: Provider.of(context),
+        authorRepo: Provider.of(context),
+        orderRepo: Provider.of(context),
+      ),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
@@ -111,7 +121,7 @@ class BookListWidget extends StatelessWidget {
             builder: (context, data, child) {
               print("data: $data");
 
-              if (data == null) {
+              if (data!.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(
                     backgroundColor: Colors.yellow,
