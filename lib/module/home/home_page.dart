@@ -787,7 +787,9 @@ class _CartWidgetState extends State<CartWidget> {
               }
               var cart = value;
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, "/checkout");
+                },
                 child: Container(
                   margin: EdgeInsets.only(top: 15, right: 20),
                   child: badges.Badge(

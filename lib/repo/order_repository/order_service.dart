@@ -24,14 +24,11 @@ class OrderService {
     );
   }
 
-  // Future<Response> orderDetail(String orderId) {
-  //   return BookClient.instance.dio.get(
-  //     '/order/list',
-  //     queryParameters: {
-  //       'order_id': orderId,
-  //     },
-  //   );
-  // }
+  Future<Response> orderDetail() {
+    return BookClient.instance.dio.get(
+      '/order/list',
+    );
+  }
 
   // Future<Response> updateOrder(BookData bookData) {
   //   return BookClient.instance.dio.post(

@@ -5,6 +5,8 @@ import 'dart:ui';
 import 'package:bookstore_mobile/module/page/mycart.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -46,6 +48,13 @@ class _FamoousAuthorState extends State<FamousAuthor> {
         ProxyProvider<AuthorService, AuthorRepo>(
           update: (context, authorService, previous) =>
               AuthorRepo(authorService: authorService),
+        ),
+        Provider.value(
+          value: OrderService(),
+        ),
+        ProxyProvider<OrderService, OrderRepo>(
+          update: (context, orderService, previous) =>
+              OrderRepo(orderService: orderService),
         ),
       ],
       child: Scaffold(

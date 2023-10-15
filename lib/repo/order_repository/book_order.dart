@@ -15,7 +15,7 @@ class BookOrder {
     required this.shipCost,
   });
 
-  static List<BookOrder> parseBookDataList(map) {
+  static List<BookOrder> parseBookOrderList(map) {
     var list = map["data"] as List;
     return list.map((book) => BookOrder.fromJson(book)).toList();
   }

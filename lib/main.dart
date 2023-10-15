@@ -1,3 +1,4 @@
+import 'package:bookstore_mobile/module/checkout/checkout.dart';
 import 'package:bookstore_mobile/module/home/home_page.dart';
 import 'package:bookstore_mobile/module/author/famous_author.dart';
 import 'package:bookstore_mobile/module/book/hotbook.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         "/profile": (context) => MyProfile(),
         "/famous-author": (context) => FamousAuthor(),
         "/search_view": (context) => SearchView(),
+        "/checkout": (context) => CheckoutWidget(),
       },
       //home: SignInPage(),
     );

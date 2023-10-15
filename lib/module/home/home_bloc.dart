@@ -58,10 +58,10 @@ class HomeBloc extends BaseBloc {
   Sink<ShoppingCart> get shoppingCartSink => _shoppingCardSubject.sink;
 
   handleAddToCart(event) {
-    AddToCartEvent addToCartEvent = event as AddToCartEvent;
-    _orderRepo.addToCart(addToCartEvent.bookData).then((shoppingCart) {
-      shoppingCartSink.add(shoppingCart);
-    });
+    // AddToCartEvent addToCartEvent = event as AddToCartEvent;
+    // _orderRepo.addToCart(addToCartEvent.bookData).then((shoppingCart) {
+    //   shoppingCartSink.add(shoppingCart);
+    // });
   }
 
   getShoppingCartInfo() {
