@@ -8,7 +8,6 @@ import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:provider/provider.dart';
-import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -25,7 +24,6 @@ class HotBook extends StatefulWidget {
 }
 
 class _HotBookState extends State<HotBook> {
-  List<Book> books = getBookList();
   List<BookData> bookData = [];
 
   @override

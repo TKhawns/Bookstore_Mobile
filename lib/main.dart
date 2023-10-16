@@ -4,6 +4,9 @@ import 'package:bookstore_mobile/module/author/famous_author.dart';
 import 'package:bookstore_mobile/module/book/hotbook.dart';
 import 'package:bookstore_mobile/module/page/profile.dart';
 import 'package:bookstore_mobile/module/search/search_view.dart';
+import 'package:bookstore_mobile/module/shop/myshop.dart';
+import 'package:bookstore_mobile/module/shop/shop_info.dart';
+import 'package:bookstore_mobile/module/shop/showdialog.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:bookstore_mobile/module/signup/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +52,9 @@ class MyApp extends StatelessWidget {
         "/famous-author": (context) => FamousAuthor(),
         "/search_view": (context) => SearchView(),
         "/checkout": (context) => CheckoutWidget(),
+        "/myshop": (context) => MyshopWidget(),
+        "/showdialog": (context) => ShowDialogWidget(),
+        "/shopinfo": (context) => ShopInfoWidget(),
       },
       //home: SignInPage(),
     );

@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:bookstore_mobile/module/page/chatshop.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
-import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -293,13 +292,12 @@ class _BookDetailState extends State<BookDetail> {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 35, // Image radius
-                    backgroundImage:
-                        AssetImage("assets/images/${widget.bookData.image}"),
+                    backgroundImage: NetworkImage(widget.bookData.shop_image),
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      "Books Store",
+                      widget.bookData.shopName,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -315,7 +313,9 @@ class _BookDetailState extends State<BookDetail> {
                   Container(
                     padding: EdgeInsets.only(left: 30, right: 10),
                     child: ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => {
+                        Navigator.pushNamed(context, "/shopinfo"),
+                      },
                       style: ElevatedButton.styleFrom(
                           minimumSize: Size(40, 40),
                           backgroundColor:

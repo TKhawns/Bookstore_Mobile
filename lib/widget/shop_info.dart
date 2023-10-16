@@ -1,5 +1,3 @@
-import 'package:bookstore_mobile/widget/book_list.dart';
-
 class Shop {
   final String fullName;
   final String address;

@@ -8,17 +8,22 @@ class BookData {
   int count;
   String shipCost;
   String authorName;
+  String shopName;
+  String shop_image;
 
-  BookData(
-      {required this.book_id,
-      required this.title,
-      required this.description,
-      required this.score,
-      required this.image,
-      required this.cost,
-      required this.count,
-      required this.shipCost,
-      required this.authorName});
+  BookData({
+    required this.book_id,
+    required this.title,
+    required this.description,
+    required this.score,
+    required this.image,
+    required this.cost,
+    required this.count,
+    required this.shipCost,
+    required this.authorName,
+    required this.shopName,
+    required this.shop_image,
+  });
 
   static List<BookData> parseBookDataList(map) {
     var list = map["data"] as List;
@@ -35,7 +40,9 @@ class BookData {
         cost: map["price"],
         count: int.parse(map["number_books"].toString()),
         shipCost: map["shipcost"],
-        authorName: map['authorname']);
+        authorName: map['authorname'],
+        shopName: map['shopname'],
+        shop_image: map['shop_image']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -47,5 +54,7 @@ class BookData {
         "number_books": count,
         "shipcost": shipCost,
         "authorname": authorName,
+        "shopname": shopName,
+        "shop_image": shop_image
       };
 }

@@ -17,7 +17,6 @@ import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/widget/author_list.dart';
 import 'package:bookstore_mobile/widget/bloc_listener.dart';
-import 'package:bookstore_mobile/widget/book_list.dart';
 import 'package:bookstore_mobile/widget/navigator_item.dart';
 import 'package:bookstore_mobile/widget/shop_info.dart';
 import 'package:flutter/material.dart';

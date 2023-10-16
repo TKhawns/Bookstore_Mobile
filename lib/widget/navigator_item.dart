@@ -11,7 +11,7 @@ List<NavigationItem> getNavigationItemList() {
   return <NavigationItem>[
     NavigationItem(Icons.home_rounded, "Trang chủ", "/home"),
     NavigationItem(Icons.menu_book, "Sách hay", "/hotbook"),
-    NavigationItem(Icons.feed, "Mua bán", "/myshop"),
+    NavigationItem(Icons.feed, "Mua bán", "/showdialog"),
     NavigationItem(Icons.account_circle_rounded, "Tài khoản", "/profile"),
   ];
 }

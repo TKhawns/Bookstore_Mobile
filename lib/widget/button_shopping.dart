@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_new
+
 import 'package:flutter/material.dart';
 
 class BtnCartAction extends StatelessWidget {
@@ -25,7 +27,10 @@ class BtnCartAction extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               title,
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color.fromARGB(255, 0, 151, 178),
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ),

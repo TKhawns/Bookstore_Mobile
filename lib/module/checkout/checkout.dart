@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors
 
 import 'dart:async';
 
@@ -139,31 +139,61 @@ Widget newbuildBook(BookOrder book, int index, BuildContext context) {
                   child: Text(
                     book.title,
                     style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 5, left: 15),
+                  margin: EdgeInsets.only(top: 10, left: 15),
                   child: Text(
-                    "100 books",
-                    style: TextStyle(color: Colors.blue, fontSize: 17),
+                    "Sách được bảo hiểm bằng BookCare",
+                    style: TextStyle(color: Colors.grey[500], fontSize: 17),
                   ),
                 ),
                 Expanded(
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 5, left: 15),
-                      child: Text(
-                        book.cost,
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 5, left: 15),
+                          child: Text(
+                            book.cost,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 15, top: 10),
+                          child: Row(
+                            children: [
+                              BtnCartAction(
+                                title: '-',
+                                onPressed: () {},
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Text('1',
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red)),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              BtnCartAction(
+                                title: '+',
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 15),
@@ -181,7 +211,7 @@ Widget newbuildBook(BookOrder book, int index, BuildContext context) {
                           ),
                         ),
                         child: Text(
-                          ' Buy now ',
+                          'Delete',
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ),

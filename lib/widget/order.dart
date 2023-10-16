@@ -1,4 +1,4 @@
-import 'package:bookstore_mobile/repo/book_repository/book_order.dart';
+import 'package:bookstore_mobile/repo/order_repository/book_order.dart';
 
 class Order {
   List<BookOrder> items;
