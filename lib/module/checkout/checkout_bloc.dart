@@ -1,9 +1,8 @@
-import 'package:bookstore_mobile/repo/order_repository/book_order.dart';
-
 import '../../base/base_bloc.dart';
 import '../../base/base_event.dart';
+import '../../event/add_to_cart_event.dart';
+import '../../repo/book_repository/book_data.dart';
 import '../../repo/order_repository/order_repo.dart';
-import '../../widget/order.dart';
 
 class CheckoutBloc extends BaseBloc {
   final OrderRepo _orderRepo;
@@ -39,8 +38,8 @@ class CheckoutBloc extends BaseBloc {
   //   });
   // }
 
-  Stream<List<BookOrder>> getOrderDetail() {
-    return Stream<List<BookOrder>>.fromFuture(
+  Stream<List<BookData>> getOrderDetail() {
+    return Stream<List<BookData>>.fromFuture(
       _orderRepo.getOrderDetail(),
     );
   }

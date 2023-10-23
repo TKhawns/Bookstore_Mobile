@@ -6,10 +6,12 @@ import 'package:bookstore_mobile/module/search/search_book_bloc.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../repo/book_repository/book_repo.dart';
 import '../../repo/book_repository/book_service.dart';
+import '../../repo/order_repository/order_service.dart';
 import '../home/book_detail.dart';
 import '../home/home_bloc.dart';
 
@@ -49,6 +51,13 @@ class _SearchViewState extends State<SearchView> {
         ProxyProvider<AuthorService, AuthorRepo>(
           update: (context, authorService, previous) =>
               AuthorRepo(authorService: authorService),
+        ),
+        Provider.value(
+          value: OrderService(),
+        ),
+        ProxyProvider<OrderService, OrderRepo>(
+          update: (context, orderService, previous) =>
+              OrderRepo(orderService: orderService),
         ),
       ],
       child: Scaffold(

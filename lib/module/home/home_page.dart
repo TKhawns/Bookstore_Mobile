@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Provider.value(value: OrderService()),
         ProxyProvider<OrderService, OrderRepo>(
+          create: (context) => OrderRepo(orderService: OrderService()),
           update: (context, orderService, previous) =>
               OrderRepo(orderService: orderService),
         ),
@@ -763,17 +764,12 @@ class _CartWidgetState extends State<CartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    ShoppingCart count = ShoppingCart(total: 0);
     return Consumer<HomeBloc>(
       builder: (context, bloc, child) {
-        bloc.shoppingCartStream.listen((event) {
-          count.total = event.total;
-        });
-        return StreamProvider<ShoppingCart>.value(
-          initialData: count,
+        return StreamProvider<ShoppingCart?>.value(
+          initialData: ShoppingCart(total: 0),
           value: bloc.shoppingCartStream,
           catchError: (context, error) {
-            print(error);
             return ShoppingCart(total: -1);
           },
           child: Consumer<ShoppingCart>(
@@ -784,7 +780,6 @@ class _CartWidgetState extends State<CartWidget> {
                   child: Icon(Icons.shopping_cart),
                 );
               }
-              var cart = value;
               return GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, "/checkout");
@@ -793,7 +788,7 @@ class _CartWidgetState extends State<CartWidget> {
                   margin: EdgeInsets.only(top: 15, right: 20),
                   child: badges.Badge(
                     badgeContent: Text(
-                      "${cart.total}",
+                      "${value.total}",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
 import 'dart:ui';
 
+import 'package:bookstore_mobile/event/add_to_cart_event.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
@@ -13,6 +14,7 @@ import 'package:badges/badges.dart' as badges;
 
 import '../../repo/book_repository/book_repo.dart';
 import '../../repo/book_repository/book_service.dart';
+import '../../widget/shopping_cart.dart';
 import '../home/book_detail.dart';
 import '../home/home_bloc.dart';
 
@@ -64,21 +66,7 @@ class _HotBookState extends State<HotBook> {
           ),
           backgroundColor: const Color.fromARGB(255, 0, 151, 178),
           actions: [
-            Container(
-                margin: EdgeInsets.only(top: 15, right: 30),
-                child: badges.Badge(
-                  badgeContent: Text(
-                    '1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.shopping_cart,
-                    size: 30,
-                  ),
-                )),
+            ShoppingCartWidget(),
           ],
         ),
         body: ScrollConfiguration(
@@ -109,6 +97,7 @@ class BookListWidget extends StatelessWidget {
         bloc.getBookList().listen((event) {
           for (var book in event) {
             print("Title: ${book.title}");
+            print("Author name TESTTTT ${book.authorName}");
             bookData.add(book);
           }
         });
@@ -117,8 +106,6 @@ class BookListWidget extends StatelessWidget {
           value: bloc.getBookList(),
           child: Consumer<List<BookData>?>(
             builder: (context, data, child) {
-              print("data: $data");
-
               if (data!.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(
@@ -128,7 +115,7 @@ class BookListWidget extends StatelessWidget {
               }
 
               return ListView(
-                children: newBuildBooks(bookData, context),
+                children: newBuildBooks(bookData, context, bloc),
               );
             },
           ),
@@ -137,15 +124,17 @@ class BookListWidget extends StatelessWidget {
     );
   }
 
-  List<Widget> newBuildBooks(List<BookData> data, BuildContext context) {
+  List<Widget> newBuildBooks(
+      List<BookData> data, BuildContext context, HomeBloc bloc) {
     List<Widget> list = [];
     for (var i = 0; i < data.length; i++) {
-      list.add(newbuildBook(data[i], i, context));
+      list.add(newbuildBook(data[i], i, context, bloc));
     }
     return list;
   }
 
-  Widget newbuildBook(BookData book, int index, BuildContext context) {
+  Widget newbuildBook(
+      BookData book, int index, BuildContext context, HomeBloc bloc) {
     return Container(
       height: 180,
       child: Card(
@@ -211,7 +200,9 @@ class BookListWidget extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(right: 15),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            bloc.event.add(AddToCartEvent(book));
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 0, 151, 178),
                             shape: RoundedRectangleBorder(
@@ -237,6 +228,83 @@ class BookListWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ShoppingCartWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Provider<HomeBloc?>.value(
+      value: HomeBloc.getInstance(
+        bookRepo: Provider.of(context),
+        orderRepo: Provider.of(context),
+        authorRepo: Provider.of(context),
+      ),
+      child: CartWidget(),
+    );
+  }
+}
+
+class CartWidget extends StatefulWidget {
+  @override
+  _CartWidgetState createState() => _CartWidgetState();
+}
+
+class _CartWidgetState extends State<CartWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    var bloc = Provider.of<HomeBloc>(context);
+    bloc.getShoppingCartInfo();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<HomeBloc>(
+      builder: (context, bloc, child) {
+        return StreamProvider<ShoppingCart?>.value(
+          initialData: null,
+          value: bloc.shoppingCartStream,
+          catchError: (context, error) {
+            return ShoppingCart(total: -1);
+          },
+          child: Consumer<ShoppingCart?>(
+            builder: (context, value, child) {
+              if (value == null) {
+                return Container(
+                  margin: EdgeInsets.only(top: 15, right: 20),
+                  child: Icon(Icons.shopping_cart),
+                );
+              }
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/checkout");
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 15, right: 20),
+                  child: badges.Badge(
+                    badgeContent: Text(
+                      "${value.total}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: Icon(Icons.shopping_cart),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

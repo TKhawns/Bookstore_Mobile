@@ -1,15 +1,15 @@
-import 'package:bookstore_mobile/repo/order_repository/book_order.dart';
+import '../repo/book_repository/book_data.dart';
 
 class Order {
-  List<BookOrder> items;
+  List<BookData> items;
 
   Order({required this.items});
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         items: parseOrderList(json),
       );
-  static List<BookOrder> parseOrderList(map) {
+  static List<BookData> parseOrderList(map) {
     var list = map['data'] as List;
-    return list.map((product) => BookOrder.fromJson(product)).toList();
+    return list.map((product) => BookData.fromJson(product)).toList();
   }
 }

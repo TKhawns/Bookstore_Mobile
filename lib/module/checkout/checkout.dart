@@ -1,8 +1,4 @@
 // ignore_for_file: unnecessary_null_comparison, prefer_const_constructors
-
-import 'dart:async';
-
-import 'package:bookstore_mobile/repo/order_repository/book_order.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/widget/bloc_listener.dart';
@@ -11,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../../widget/order.dart';
+import '../../repo/book_repository/book_data.dart';
 import 'checkout_bloc.dart';
 
 class CheckoutWidget extends StatefulWidget {
@@ -55,7 +51,7 @@ class ShoppingCartInfoWidget extends StatefulWidget {
 }
 
 class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
-  List<BookOrder> initData = [];
+  List<BookData> initData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +68,13 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
           });
           return BlocListener<CheckoutBloc>(
             listener: (event) {},
-            child: StreamProvider<List<BookOrder>>.value(
+            child: StreamProvider<List<BookData>>.value(
               catchError: (context, error) {
                 return [];
               },
               initialData: initData,
               value: bloc.getOrderDetail(),
-              child: Consumer<List<BookOrder>>(
+              child: Consumer<List<BookData>>(
                 builder: (context, value, child) {
                   if (value.isEmpty) {
                     return Container(
@@ -103,7 +99,7 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
   }
 }
 
-List<Widget> newBuildBooks(List<BookOrder> data, BuildContext context) {
+List<Widget> newBuildBooks(List<BookData> data, BuildContext context) {
   List<Widget> list = [];
   for (var i = 0; i < data.length; i++) {
     list.add(newbuildBook(data[i], i, context));
@@ -111,7 +107,7 @@ List<Widget> newBuildBooks(List<BookOrder> data, BuildContext context) {
   return list;
 }
 
-Widget newbuildBook(BookOrder book, int index, BuildContext context) {
+Widget newbuildBook(BookData book, int index, BuildContext context) {
   return Container(
     height: 180,
     child: Card(
@@ -178,7 +174,7 @@ Widget newbuildBook(BookOrder book, int index, BuildContext context) {
                               SizedBox(
                                 width: 15,
                               ),
-                              Text('1',
+                              Text(book.quantity,
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,

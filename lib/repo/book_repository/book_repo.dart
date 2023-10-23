@@ -16,10 +16,6 @@ class BookRepo {
     try {
       var response = await _bookService.bookInfo();
       var bookList = BookData.parseBookDataList(response.data);
-      print("test data");
-      for (var book in bookList) {
-        print("title: ${book.title}");
-      }
       c.complete(bookList);
     } on DioException {
       c.completeError("Get book fail");

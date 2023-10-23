@@ -2,7 +2,6 @@ import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:dio/dio.dart';
 
 import '../../database/dio_get.dart';
-import 'book_order.dart';
 
 class OrderService {
   Future<Response> countShoppingCart() {
@@ -11,15 +10,22 @@ class OrderService {
     );
   }
 
-  Future<Response> addToCart(BookOrder bookData) {
+  Future<Response> addToCart(BookData bookData) {
     return BookClient.instance.dio.post(
       '/order/add',
       data: {
-        "order_id": bookData.order_id,
+        "order_id": bookData.book_id,
         "title": bookData.title,
         "description": bookData.description,
         "price": bookData.cost,
         "shipcost": bookData.shipCost,
+        "shopname": bookData.shopName,
+        "shop_image": bookData.shop_image,
+        "score": bookData.score,
+        "authorname": bookData.authorName,
+        "number_books": bookData.count,
+        "image": bookData.image,
+        "quantity": "1",
       },
     );
   }
