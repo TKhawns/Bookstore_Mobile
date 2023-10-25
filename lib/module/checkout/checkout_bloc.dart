@@ -1,3 +1,5 @@
+import 'package:bookstore_mobile/event/delete_order_event.dart';
+
 import '../../base/base_bloc.dart';
 import '../../base/base_event.dart';
 import '../../event/should_rebuild_event.dart';
@@ -25,6 +27,10 @@ class CheckoutBloc extends BaseBloc {
         handleUpdateCart(event);
         getOrderDetail();
         break;
+      case DeleteOrderEvent:
+        handleDeleteOrder(event);
+        getOrderDetail();
+        break;
     }
   }
 
@@ -43,6 +49,15 @@ class CheckoutBloc extends BaseBloc {
   handleUpdateCart(event) {
     UpdateCartEvent e = event as UpdateCartEvent;
     _orderRepo.updateOrder(e.bookData).then((isSuccess) {
+      if (isSuccess) {
+        processEventSink.add(ShouldRebuildEvent());
+      }
+    });
+  }
+
+  handleDeleteOrder(event) {
+    DeleteOrderEvent e = event as DeleteOrderEvent;
+    _orderRepo.deleteOrder(e.bookData).then((isSuccess) {
       if (isSuccess) {
         processEventSink.add(ShouldRebuildEvent());
       }

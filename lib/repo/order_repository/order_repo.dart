@@ -79,4 +79,17 @@ class OrderRepo {
     }
     return c.future;
   }
+
+  Future<bool> deleteOrder(BookData bookData) async {
+    var c = Completer<bool>();
+    try {
+      await _orderService.deleteOrder(bookData);
+      c.complete(true);
+    } on DioException {
+      c.completeError('Lỗi update đơn hàng');
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
 }

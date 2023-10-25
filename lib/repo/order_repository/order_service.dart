@@ -46,6 +46,15 @@ class OrderService {
     );
   }
 
+  Future<Response> deleteOrder(BookData bookData) {
+    return BookClient.instance.dio.post(
+      '/order/delete',
+      data: {
+        'order_id': bookData.book_id,
+      },
+    );
+  }
+
   // Future<Response> confirm(String orderId) {
   //   return BookClient.instance.dio.post(
   //     '/order/confirm',

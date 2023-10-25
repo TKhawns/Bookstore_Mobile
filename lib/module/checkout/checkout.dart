@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, prefer_is_not_empty, use_key_in_widget_constructors
 import 'dart:ui';
 
+import 'package:bookstore_mobile/event/delete_order_event.dart';
 import 'package:bookstore_mobile/event/should_rebuild_event.dart';
 import 'package:bookstore_mobile/module/home/home_bloc.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
@@ -67,7 +68,7 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
 
   handleEvent(BaseEvent event) {
     //totalPrice = 0;
-    if (event is ShouldRebuildEvent) {
+    if (event is ShouldRebuildEvent || event is DeleteOrderEvent) {
       setState(() {});
     }
   }
@@ -302,7 +303,9 @@ Widget newbuildBook(
                     Container(
                       margin: EdgeInsets.only(right: 15),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          bloc.event.add(DeleteOrderEvent(book));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 0, 151, 178),
                           shape: RoundedRectangleBorder(
