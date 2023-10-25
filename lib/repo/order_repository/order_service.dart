@@ -25,7 +25,7 @@ class OrderService {
         "authorname": bookData.authorName,
         "number_books": bookData.count,
         "image": bookData.image,
-        "quantity": "1",
+        "quantity": bookData.quantity,
       },
     );
   }
@@ -36,16 +36,15 @@ class OrderService {
     );
   }
 
-  // Future<Response> updateOrder(BookData bookData) {
-  //   return BookClient.instance.dio.post(
-  //     '/order/update',
-  //     data: {
-  //       'orderId': product.orderId,
-  //       'quantity': product.quantity,
-  //       'productId': product.productId,
-  //     },
-  //   );
-  // }
+  Future<Response> updateOrder(BookData bookData) {
+    return BookClient.instance.dio.post(
+      '/order/update',
+      data: {
+        'order_id': bookData.book_id,
+        'quantity': bookData.quantity,
+      },
+    );
+  }
 
   // Future<Response> confirm(String orderId) {
   //   return BookClient.instance.dio.post(

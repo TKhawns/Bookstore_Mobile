@@ -1,25 +1,30 @@
 import '../../base/base_bloc.dart';
 import '../../base/base_event.dart';
-import '../../event/add_to_cart_event.dart';
+import '../../event/should_rebuild_event.dart';
+import '../../event/update_quantity_event.dart';
 import '../../repo/book_repository/book_data.dart';
 import '../../repo/order_repository/order_repo.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CheckoutBloc extends BaseBloc {
   final OrderRepo _orderRepo;
-
+  List<BookData> listCall = [];
   CheckoutBloc({
     required OrderRepo orderRepo,
   }) : _orderRepo = orderRepo;
 
+  final _orderSubject = BehaviorSubject<List<BookData>>();
+
+  Stream<List<BookData>> get orderStream => _orderSubject.stream;
+  Sink<List<BookData>> get orderSink => _orderSubject.sink;
+
   @override
   void dispatchEvent(BaseEvent event) {
     switch (event.runtimeType) {
-      // case UpdateCartEvent:
-      //   handleUpdateCart(event);
-      //   break;
-      // case ConfirmOrderEvent:
-      //   handleConfirmOrder(event);
-      //   break;
+      case UpdateCartEvent:
+        handleUpdateCart(event);
+        getOrderDetail();
+        break;
     }
   }
 
@@ -30,13 +35,19 @@ class CheckoutBloc extends BaseBloc {
   // }
 
   // handleUpdateCart(event) {
-  //   UpdateCartEvent e = event as UpdateCartEvent;
-  //   _orderRepo.updateOrder(e.product).then((isSuccess) {
-  //     if (isSuccess) {
-  //       processEventSink.add(ShouldRebuildEvent());
-  //     }
+  //   UpdateCartEvent updateCartEvent = event as UpdateCartEvent;
+  //   _orderRepo.updateOrder(updateCartEvent.bookData).then((updateCart) {
+  //     orderSink.add(updateCart);
   //   });
   // }
+  handleUpdateCart(event) {
+    UpdateCartEvent e = event as UpdateCartEvent;
+    _orderRepo.updateOrder(e.bookData).then((isSuccess) {
+      if (isSuccess) {
+        processEventSink.add(ShouldRebuildEvent());
+      }
+    });
+  }
 
   Stream<List<BookData>> getOrderDetail() {
     return Stream<List<BookData>>.fromFuture(
@@ -47,5 +58,6 @@ class CheckoutBloc extends BaseBloc {
   @override
   void dispose() {
     super.dispose();
+    _orderSubject.close();
   }
 }

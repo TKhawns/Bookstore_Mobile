@@ -5,8 +5,6 @@ import 'package:bookstore_mobile/base/base_event.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../home/home_bloc.dart';
-
 class SearchBookBloc extends BaseBloc {
   final _searchText = BehaviorSubject<String>();
 
@@ -15,7 +13,6 @@ class SearchBookBloc extends BaseBloc {
 
   StreamController<List<BookData>> searchController =
       StreamController<List<BookData>>();
-
 
   void dispose() {
     super.dispose();

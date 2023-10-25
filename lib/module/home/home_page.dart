@@ -15,7 +15,6 @@ import 'package:bookstore_mobile/repo/book_repository/book_repo.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_service.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
-import 'package:bookstore_mobile/widget/author_list.dart';
 import 'package:bookstore_mobile/widget/bloc_listener.dart';
 import 'package:bookstore_mobile/widget/navigator_item.dart';
 import 'package:bookstore_mobile/widget/shop_info.dart';
@@ -41,7 +40,6 @@ class _HomePageState extends State<HomePage> {
 
   List<Filter> filters = getFilterList();
   Filter selectedFilter = Filter("");
-  List<Author> authors = getAuthorList();
   List<NavigationItem> navigationItems = getNavigationItemList();
   NavigationItem selectedItem = NavigationItem(Icons.book, "", "");
   List<BookData> bookData = [];
@@ -502,7 +500,6 @@ class BookListWidget extends StatelessWidget {
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
-            print("Title: ${book.title}");
             bookData.add(book);
           }
         });
@@ -511,8 +508,6 @@ class BookListWidget extends StatelessWidget {
           value: bloc.getBookList(),
           child: Consumer<List<BookData>?>(
             builder: (context, data, child) {
-              print("data: $data");
-
               if (data!.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(
@@ -612,7 +607,6 @@ class AuthorListWidget extends StatelessWidget {
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getAuthorList().listen((event) {
           for (var author in event) {
-            print("Title: ${author.full_name}");
             authorData.add(author);
           }
         });
@@ -621,8 +615,6 @@ class AuthorListWidget extends StatelessWidget {
           value: bloc.getAuthorList(),
           child: Consumer<List<AuthorData>?>(
             builder: (context, data, child) {
-              print("data: $data");
-
               if (data!.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(

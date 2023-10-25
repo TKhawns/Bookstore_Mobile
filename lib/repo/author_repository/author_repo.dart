@@ -17,10 +17,6 @@ class AuthorRepo {
     try {
       var response = await _authorService.authorInfo();
       var authorList = AuthorData.parseAuthorDataList(response.data);
-      print("test data");
-      for (var author in authorList) {
-        print("name: ${author.full_name}");
-      }
       c.complete(authorList);
     } on DioException {
       c.completeError("Get author fail");

@@ -53,4 +53,30 @@ class OrderRepo {
     }
     return c.future;
   }
+
+  // Future<List<BookData>> updateOrder(BookData bookData) async {
+  //   var c = Completer<List<BookData>>();
+  //   try {
+  //     var response = await _orderService.updateOrder(bookData);
+  //     var orderList = BookData.parseBookDataList(response.data);
+  //     c.complete(orderList);
+  //   } on DioException {
+  //     c.completeError('Lỗi update đơn hàng');
+  //   } catch (e) {
+  //     c.completeError(e);
+  //   }
+  //   return c.future;
+  // }
+  Future<bool> updateOrder(BookData bookData) async {
+    var c = Completer<bool>();
+    try {
+      await _orderService.updateOrder(bookData);
+      c.complete(true);
+    } on DioException {
+      c.completeError('Lỗi update đơn hàng');
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
 }

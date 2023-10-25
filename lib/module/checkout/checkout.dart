@@ -1,27 +1,31 @@
-// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors
+// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, prefer_is_not_empty, use_key_in_widget_constructors
+import 'dart:ui';
+
+import 'package:bookstore_mobile/event/should_rebuild_event.dart';
+import 'package:bookstore_mobile/module/home/home_bloc.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/widget/bloc_listener.dart';
 import 'package:bookstore_mobile/widget/button_shopping.dart';
+import 'package:bookstore_mobile/widget/normalbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-
+import '../../base/base_event.dart';
+import '../../event/update_quantity_event.dart';
 import '../../repo/book_repository/book_data.dart';
 import 'checkout_bloc.dart';
 
-class CheckoutWidget extends StatefulWidget {
+class CheckoutWidget extends StatelessWidget {
   const CheckoutWidget({super.key});
 
-  @override
-  State<CheckoutWidget> createState() => _CheckoutWidgetState();
-}
-
-class _CheckoutWidgetState extends State<CheckoutWidget> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<CheckoutWidget>(
+          create: (_) => CheckoutWidget(),
+        ),
         Provider.value(value: OrderService()),
         ProxyProvider<OrderService, OrderRepo>(
           update: (context, orderService, previous) =>
@@ -37,21 +41,36 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
           ),
           backgroundColor: const Color.fromARGB(255, 0, 151, 178),
         ),
-        body: ShoppingCartInfoWidget(),
+        body: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+            },
+          ),
+          child: ShoppingCartInfoWidget(),
+        ),
       ),
     );
   }
 }
 
 class ShoppingCartInfoWidget extends StatefulWidget {
-  const ShoppingCartInfoWidget({super.key});
-
   @override
   State<ShoppingCartInfoWidget> createState() => _ShoppingCartInfoWidgetState();
 }
 
 class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
   List<BookData> initData = [];
+  int totalPrice = 0;
+  bool shouldRebuild = true;
+
+  handleEvent(BaseEvent event) {
+    //totalPrice = 0;
+    if (event is ShouldRebuildEvent) {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +81,22 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
       child: Consumer<CheckoutBloc>(
         builder: (context, bloc, child) {
           bloc.getOrderDetail().listen((event) {
-            for (var i = 0; i < event.length; i++) {
-              initData.add(event[i]);
+            totalPrice = 0;
+            for (var book in event) {
+              initData.add(book);
+              totalPrice += int.parse(book.cost) * int.parse(book.quantity);
             }
           });
           return BlocListener<CheckoutBloc>(
-            listener: (event) {},
+            listener: handleEvent,
             child: StreamProvider<List<BookData>>.value(
               catchError: (context, error) {
                 return [];
               },
               initialData: initData,
+              updateShouldNotify: (prev, current) {
+                return shouldRebuild;
+              },
               value: bloc.getOrderDetail(),
               child: Consumer<List<BookData>>(
                 builder: (context, value, child) {
@@ -84,8 +108,81 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
                     );
                   }
                   if (!value.isEmpty) {
-                    return ListView(
-                      children: newBuildBooks(value, context),
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            children: newBuildBooks(value, context, bloc),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              height: 2,
+                              color: Colors.grey[300],
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 60,
+                              child: Text(
+                                "Địa chỉ nhận hàng: Xuân Thủy, Hà Nội\nKhách hàng: Trinh Khanh",
+                                style: TextStyle(
+                                    color: Colors.grey[800], fontSize: 20),
+                              ),
+                            ),
+                            Container(
+                              height: 2,
+                              color: Colors.grey[300],
+                            ),
+                            Container(
+                              height: 70,
+                              alignment: Alignment.center,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Tổng thanh toán:",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          totalPrice.toString(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                      width: 150,
+                                      height: 67,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red),
+                                        onPressed: () {},
+                                        child: Text(
+                                          "Mua hàng",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     );
                   }
                   return Container();
@@ -99,15 +196,17 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
   }
 }
 
-List<Widget> newBuildBooks(List<BookData> data, BuildContext context) {
+List<Widget> newBuildBooks(
+    List<BookData> data, BuildContext context, CheckoutBloc bloc) {
   List<Widget> list = [];
   for (var i = 0; i < data.length; i++) {
-    list.add(newbuildBook(data[i], i, context));
+    list.add(newbuildBook(data[i], i, context, bloc));
   }
   return list;
 }
 
-Widget newbuildBook(BookData book, int index, BuildContext context) {
+Widget newbuildBook(
+    BookData book, int index, BuildContext context, CheckoutBloc bloc) {
   return Container(
     height: 180,
     child: Card(
@@ -169,12 +268,16 @@ Widget newbuildBook(BookData book, int index, BuildContext context) {
                             children: [
                               BtnCartAction(
                                 title: '-',
-                                onPressed: () {},
+                                onPressed: () {
+                                  book.quantity =
+                                      (int.parse(book.quantity) - 1).toString();
+                                  bloc.event.add(UpdateCartEvent(book));
+                                },
                               ),
                               SizedBox(
                                 width: 15,
                               ),
-                              Text(book.quantity,
+                              Text('${book.quantity}',
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,
@@ -184,7 +287,12 @@ Widget newbuildBook(BookData book, int index, BuildContext context) {
                               ),
                               BtnCartAction(
                                 title: '+',
-                                onPressed: () {},
+                                onPressed: () {
+                                  book.quantity =
+                                      (int.parse(book.quantity) + 1).toString();
+                                  print("TEST QUANTITY : ${book.quantity}");
+                                  bloc.event.add(UpdateCartEvent(book));
+                                },
                               ),
                             ],
                           ),

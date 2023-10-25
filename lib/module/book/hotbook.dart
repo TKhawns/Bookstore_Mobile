@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, depend_on_referenced_packages, use_key_in_widget_constructors, must_be_immutable
 
 import 'dart:ui';
 
@@ -96,8 +96,6 @@ class BookListWidget extends StatelessWidget {
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
-            print("Title: ${book.title}");
-            print("Author name TESTTTT ${book.authorName}");
             bookData.add(book);
           }
         });

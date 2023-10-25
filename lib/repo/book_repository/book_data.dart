@@ -10,7 +10,7 @@ class BookData {
   String authorName;
   String shopName;
   String shop_image;
-  String quantity;
+  String quantity = '1';
 
   BookData({
     required this.book_id,
@@ -34,18 +34,19 @@ class BookData {
 
   factory BookData.fromJson(Map<String, dynamic> map) {
     return BookData(
-        book_id: int.parse(map["book_id"].toString()),
-        title: map["title"],
-        description: map["description"],
-        score: map["score"],
-        image: map["image"],
-        cost: map["price"],
-        count: int.parse(map["number_books"].toString()),
-        shipCost: map["shipcost"],
-        authorName: map['authorname'],
-        shopName: map['shopname'],
-        shop_image: map['shop_image'],
-        quantity: map['quantity']);
+      book_id: int.parse(map["book_id"].toString()),
+      title: map["title"],
+      description: map["description"],
+      score: map["score"],
+      image: map["image"],
+      cost: map["price"],
+      count: int.parse(map["number_books"].toString()),
+      shipCost: map["shipcost"],
+      authorName: map['authorname'],
+      shopName: map['shopname'],
+      shop_image: map['shop_image'],
+      quantity: map['quantity'],
+    );
   }
 
   Map<String, dynamic> toJson() => {

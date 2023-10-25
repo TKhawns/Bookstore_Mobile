@@ -2,7 +2,6 @@
 
 import 'dart:ui';
 
-import 'package:bookstore_mobile/module/page/mycart.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
@@ -64,24 +63,6 @@ class _FamoousAuthorState extends State<FamousAuthor> {
             "Famous Authors",
             style: TextStyle(color: Colors.white, fontSize: 25),
           ),
-          backgroundColor: const Color.fromARGB(255, 0, 151, 178),
-          actions: [
-            Container(
-                margin: EdgeInsets.only(top: 15, right: 30),
-                child: badges.Badge(
-                  badgeContent: Text(
-                    '1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.shopping_cart,
-                    size: 30,
-                  ),
-                )),
-          ],
         ),
         body: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(
