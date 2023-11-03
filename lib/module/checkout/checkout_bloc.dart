@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:bookstore_mobile/event/delete_order_event.dart';
 
 import '../../base/base_bloc.dart';
@@ -10,7 +12,7 @@ import 'package:rxdart/rxdart.dart';
 
 class CheckoutBloc extends BaseBloc {
   final OrderRepo _orderRepo;
-  List<BookData> listCall = [];
+
   CheckoutBloc({
     required OrderRepo orderRepo,
   }) : _orderRepo = orderRepo;

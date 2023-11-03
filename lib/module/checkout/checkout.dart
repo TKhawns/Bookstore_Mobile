@@ -1,14 +1,12 @@
-// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, prefer_is_not_empty, use_key_in_widget_constructors
+// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, prefer_is_not_empty, use_key_in_widget_constructors, unnecessary_import, depend_on_referenced_packages, sized_box_for_whitespace, avoid_print
 import 'dart:ui';
 
 import 'package:bookstore_mobile/event/delete_order_event.dart';
 import 'package:bookstore_mobile/event/should_rebuild_event.dart';
-import 'package:bookstore_mobile/module/home/home_bloc.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/widget/bloc_listener.dart';
 import 'package:bookstore_mobile/widget/button_shopping.dart';
-import 'package:bookstore_mobile/widget/normalbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +14,7 @@ import '../../base/base_event.dart';
 import '../../event/update_quantity_event.dart';
 import '../../repo/book_repository/book_data.dart';
 import 'checkout_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class CheckoutWidget extends StatelessWidget {
   const CheckoutWidget({super.key});
@@ -102,10 +101,8 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
               child: Consumer<List<BookData>>(
                 builder: (context, value, child) {
                   if (value.isEmpty) {
-                    return Container(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                    return Center(
+                      child: CircularProgressIndicator(),
                     );
                   }
                   if (!value.isEmpty) {
@@ -256,7 +253,7 @@ Widget newbuildBook(
                         Container(
                           margin: EdgeInsets.only(top: 5, left: 15),
                           child: Text(
-                            book.cost,
+                            '${MoneyFormatter(amount: double.parse(book.cost)).output.withoutFractionDigits} VND',
                             style: TextStyle(
                                 color: Colors.red,
                                 fontSize: 17,
@@ -278,7 +275,7 @@ Widget newbuildBook(
                               SizedBox(
                                 width: 15,
                               ),
-                              Text('${book.quantity}',
+                              Text(book.quantity,
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,

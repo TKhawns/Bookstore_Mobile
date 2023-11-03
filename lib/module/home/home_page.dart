@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, must_be_immutable, unnecessary_null_comparison
+// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, must_be_immutable, unnecessary_null_comparison, avoid_unnecessary_containers, sized_box_for_whitespace
 
 import 'dart:ui';
 
@@ -44,7 +44,8 @@ class _HomePageState extends State<HomePage> {
   NavigationItem selectedItem = NavigationItem(Icons.book, "", "");
   List<BookData> bookData = [];
 
-  SearchBookBloc searchBloc = SearchBookBloc();
+  SearchBookBloc searchBloc =
+      SearchBookBloc(bookRepo: BookRepo(bookService: BookService()));
 
   @override
   void initState() {
@@ -177,16 +178,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: Container(
-                child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(
-                    dragDevices: {
-                      PointerDeviceKind.touch,
-                      PointerDeviceKind.mouse,
-                    },
-                  ),
-                  child: BookListWidget(),
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
                 ),
+                child: BookListWidget(),
               ),
             ),
             Container(
@@ -491,6 +490,7 @@ class _HomePageState extends State<HomePage> {
 
 class BookListWidget extends StatelessWidget {
   List<BookData> bookData = [];
+  @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(

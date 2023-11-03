@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors
+
 import 'package:bookstore_mobile/module/checkout/checkout.dart';
 import 'package:bookstore_mobile/module/home/home_page.dart';
 import 'package:bookstore_mobile/module/author/famous_author.dart';
@@ -54,7 +56,6 @@ class MyApp extends StatelessWidget {
         "/checkout": (context) => CheckoutWidget(),
         "/myshop": (context) => MyshopWidget(),
         "/showdialog": (context) => ShowDialogWidget(),
-        "/shopinfo": (context) => ShopInfoWidget(),
       },
       //home: SignInPage(),
     );

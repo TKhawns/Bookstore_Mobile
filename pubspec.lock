@@ -245,6 +245,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  money_formatter:
+    dependency: "direct dev"
+    description:
+      name: money_formatter
+      sha256: b23b44e5026c944882d294ce1d7583c08ac691a7df7aabdc5e23755ea79cb6c5
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   nested:
     dependency: transitive
     description:
@@ -318,13 +326,13 @@ packages:
     source: hosted
     version: "0.27.7"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
-      sha256: b7f41bad7e521d205998772545de63ff4e6c97714775902c199353f8bf1511ac
+      sha256: "81429e4481e1ccfb51ede496e916348668fd0921627779233bd24cc3ff6abd02"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.2"
   shared_preferences_android:
     dependency: transitive
     description:

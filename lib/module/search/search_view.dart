@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:bookstore_mobile/module/search/search_book_bloc.dart';
+import 'package:bookstore_mobile/module/search/search_event.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
@@ -29,7 +30,22 @@ class _SearchViewState extends State<SearchView> {
       TextEditingController();
 
   List<BookData> bookData = [];
-  SearchBookBloc searchBloc = SearchBookBloc();
+  SearchBookBloc searchBloc =
+      SearchBookBloc(bookRepo: BookRepo(bookService: BookService()));
+
+  Color myColor = Colors.black;
+  Color myColorAdd = Colors.white;
+  void _updateColor(PointerEvent details) {
+    setState(() {
+      myColor = Colors.blue;
+    });
+  }
+
+  void _onExit(PointerEvent details) {
+    setState(() {
+      myColor = Colors.black;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +89,7 @@ class _SearchViewState extends State<SearchView> {
                   builder: (context, value, child) => TextField(
                     controller: _txtSearchTextController,
                     onChanged: (value) {
-                      searchBloc.searchSink.add(value!);
+                      searchBloc.searchSink.add(value);
                       query = value;
                       print(query);
                     },
@@ -89,8 +105,15 @@ class _SearchViewState extends State<SearchView> {
                       ),
                       filled: true,
                       fillColor: Colors.white,
-                      prefixIcon:
-                          Icon(Icons.search, size: 26, color: Colors.black),
+                      prefixIcon: MouseRegion(
+                        onHover: _updateColor,
+                        onExit: _onExit,
+                        child: GestureDetector(
+                            onTap: () =>
+                                searchBloc.event.add(SearchEvent(title: query)),
+                            child:
+                                Icon(Icons.search, size: 26, color: myColor)),
+                      ),
                       hintText: "Search Books",
                     ),
                   ),
@@ -111,7 +134,12 @@ class _SearchViewState extends State<SearchView> {
   }
 }
 
-class BookListWidget extends StatelessWidget {
+class BookListWidget extends StatefulWidget {
+  @override
+  State<BookListWidget> createState() => _BookListWidgetState();
+}
+
+class _BookListWidgetState extends State<BookListWidget> {
   List<BookData> bookData = [];
 
   Widget build(BuildContext context) {
@@ -123,14 +151,12 @@ class BookListWidget extends StatelessWidget {
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
-            if (book.title.contains(query)) {
-              bookData.add(book);
-            }
+            bookData.add(book);
           }
         });
         return StreamProvider<List<BookData>?>.value(
           initialData: bookData,
-          value: bloc.getBookList(),
+          value: bloc.getSearchResult(query),
           child: Consumer<List<BookData>?>(
             builder: (context, data, child) {
               if (data!.isEmpty) {

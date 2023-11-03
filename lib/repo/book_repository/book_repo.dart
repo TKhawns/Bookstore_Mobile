@@ -24,4 +24,19 @@ class BookRepo {
     }
     return c.future;
   }
+
+  Future<List<BookData>> searchBookList(String title) async {
+    var c = Completer<List<BookData>>();
+
+    try {
+      var response = await _bookService.searchBook(title);
+      var bookList = BookData.parseBookDataList(response.data);
+      c.complete(bookList);
+    } on DioException {
+      c.completeError("Get book fail");
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
 }

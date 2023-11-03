@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, must_be_immutable
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, must_be_immutable, depend_on_referenced_packages, sized_box_for_whitespace
 
 import 'dart:ui';
 
@@ -8,7 +8,6 @@ import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart' as badges;
 
 import '../../repo/author_repository/author_data.dart';
 import '../../repo/book_repository/book_repo.dart';
@@ -81,6 +80,7 @@ class _FamoousAuthorState extends State<FamousAuthor> {
 class AuthorListWidget extends StatelessWidget {
   List<AuthorData> authorData = [];
 
+  @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(

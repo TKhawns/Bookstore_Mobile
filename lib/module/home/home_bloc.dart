@@ -47,6 +47,12 @@ class HomeBloc extends BaseBloc {
     );
   }
 
+  Stream<List<BookData>> getSearchResult(String title) {
+    return Stream<List<BookData>>.fromFuture(
+      _bookRepo.searchBookList(title),
+    );
+  }
+
   Stream<List<AuthorData>> getAuthorList() {
     return Stream<List<AuthorData>>.fromFuture(
       _authorRepo.authorList(),

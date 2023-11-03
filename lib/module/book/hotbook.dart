@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, depend_on_referenced_packages, use_key_in_widget_constructors, must_be_immutable
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, depend_on_referenced_packages, use_key_in_widget_constructors, must_be_immutable, sized_box_for_whitespace, library_private_types_in_public_api, prefer_const_literals_to_create_immutables
 
 import 'dart:ui';
 
@@ -17,6 +17,7 @@ import '../../repo/book_repository/book_service.dart';
 import '../../widget/shopping_cart.dart';
 import '../home/book_detail.dart';
 import '../home/home_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class HotBook extends StatefulWidget {
   const HotBook({super.key});
@@ -86,6 +87,7 @@ class _HotBookState extends State<HotBook> {
 class BookListWidget extends StatelessWidget {
   List<BookData> bookData = [];
 
+  @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
@@ -177,8 +179,40 @@ class BookListWidget extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(top: 5, left: 15),
                     child: Text(
-                      "100 books",
+                      "${book.count} books",
                       style: TextStyle(color: Colors.blue, fontSize: 17),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 15, top: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: 22,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: 22,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: 22,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: 22,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.grey[300],
+                          size: 22,
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
@@ -188,7 +222,7 @@ class BookListWidget extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(top: 5, left: 15),
                         child: Text(
-                          book.cost,
+                          '${MoneyFormatter(amount: double.parse(book.cost)).output.withoutFractionDigits} VND',
                           style: TextStyle(
                               color: Colors.red,
                               fontSize: 17,

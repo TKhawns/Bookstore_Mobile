@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, sized_box_for_whitespace, sort_child_properties_last, prefer_interpolation_to_compose_strings
 import 'dart:ui';
 
 import 'package:bookstore_mobile/module/page/chatshop.dart';
+import 'package:bookstore_mobile/module/shop/shop_info.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:money_formatter/money_formatter.dart';
 
 class BookDetail extends StatefulWidget {
   //final Book book;
@@ -100,7 +102,7 @@ class _BookDetailState extends State<BookDetail> {
               Container(
                 color: Color.fromARGB(255, 0, 151, 178),
                 child: SizedBox(
-                  height: 70,
+                  height: 75,
                   width: size.width,
                   child: Padding(
                     padding: EdgeInsets.only(top: 10),
@@ -111,9 +113,9 @@ class _BookDetailState extends State<BookDetail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: EdgeInsets.only(right: 100, left: 10),
+                              padding: EdgeInsets.only(right: 100, left: 15),
                               child: Text(
-                                widget.bookData.cost,
+                                '${MoneyFormatter(amount: double.parse(widget.bookData.cost)).output.withoutFractionDigits} VND',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 21,
@@ -143,13 +145,14 @@ class _BookDetailState extends State<BookDetail> {
                           ],
                         ),
                         Container(
-                          padding: EdgeInsets.only(right: 200),
+                          padding: EdgeInsets.only(
+                            right: 250,
+                          ),
                           child: Text(
-                              "Number of books: " +
-                                  widget.bookData.count.toString(),
+                              "Quantity: " + widget.bookData.count.toString(),
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 17,
+                                fontSize: 20,
                               )),
                         ),
                       ],
@@ -214,11 +217,11 @@ class _BookDetailState extends State<BookDetail> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(left: 70),
+                              padding: EdgeInsets.only(left: 100),
                               child: Text(
-                                "Sold Books: 40",
+                                "Đã bán: 40",
                                 style: TextStyle(
-                                    fontSize: 22, color: Colors.black),
+                                    fontSize: 20, color: Colors.black),
                               ),
                             ),
                           ],
@@ -323,14 +326,19 @@ class _BookDetailState extends State<BookDetail> {
                       padding: EdgeInsets.only(left: 30, right: 10),
                       child: ElevatedButton(
                         onPressed: () => {
-                          Navigator.pushNamed(context, "/shopinfo"),
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShopInfoWidget(
+                                    shopName: widget.bookData.shopName),
+                              ))
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: Size(40, 40),
                             backgroundColor:
                                 const Color.fromARGB(255, 0, 151, 178),
                             shape: RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(2.0))),
+                                borderRadius: BorderRadius.circular(2.0))),
                         child: Text(
                           "Visit Shop",
                           style: TextStyle(fontSize: 18, color: Colors.white),

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 
 import '../../repo/book_repository/book_data.dart';

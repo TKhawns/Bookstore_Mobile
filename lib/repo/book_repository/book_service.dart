@@ -7,4 +7,13 @@ class BookService {
       '/home/booklist',
     );
   }
+
+  Future<Response> searchBook(String title) {
+    return BookClient.instance.dio.post(
+      '/home/search',
+      data: {
+        'title': title,
+      },
+    );
+  }
 }
