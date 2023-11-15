@@ -1,9 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
 class AuthorData {
   int author_id;
   String full_name;
   String description;
   String image;
-  int number_books;
+  String number_books;
   String link_youtube;
 
   AuthorData(
@@ -25,7 +27,7 @@ class AuthorData {
         full_name: map["full_name"],
         description: map["description"],
         image: map["image"],
-        number_books: int.parse(map["number_books"].toString()),
+        number_books: map["number_books"].toString(),
         link_youtube: map["link_youtube"].toString());
   }
 

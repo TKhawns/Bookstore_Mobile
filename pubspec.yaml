@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.2.2
+  crypto: ^3.0.3
 
 dev_dependencies:
   device_preview: ^1.1.0
@@ -43,7 +44,6 @@ dev_dependencies:
     sdk: flutter
   
   provider: ^6.0.5
-
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -59,6 +59,13 @@ dev_dependencies:
   video_player: ^2.7.2
   flick_video_player: ^0.5.0
   money_formatter: ^0.0.4
+  google_fonts: ^6.1.0
+  web_browser: ^0.7.4
+  flutter_web_browser: ^0.17.1
+  url_launcher: ^6.1.11
+  flutter_webview_plugin:
+    git: https://github.com/snoopdoggy322/flutter_webview_plugin
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -77,16 +84,38 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/textlogo.png
-    - assets/images/william_shakespear.jpg
-    - assets/images/anonymoust_girl.jpg
-    - assets/images/greer_hendricks.jpg
-    - assets/images/pokemonEnglish.jpg
     - assets/images/ondinhhaytudo.jpg
     - assets/images/nhagiakim.jpg
     - assets/images/thaotungtamly.jpg
     - assets/images/ditimlesong.jpg
     - assets/images/nguoiduadieu.jpg
     - assets/images/contentbacty.jpg
+    - assets/images/muahekhongten.jpg
+    - assets/images/ketoanviahe.jpg
+    - assets/images/thaydoitihon.jpg
+    - assets/images/nangluchaihuoc.jpg
+    - assets/images/khongsochamchisodung.jpg
+    - assets/images/bieuhiencuatinhthuong.jpg
+    - assets/images/sucmanhcuangontu.jpg
+    - assets/images/tuduydochai.jpg
+    - assets/images/psychologywork.jpg
+    - assets/images/tuduygiaungheo.jpg
+    - assets/images/cangkyluatcangtudo.jpg
+    - assets/images/chualanhnoidau.jpg
+    - assets/images/damyeudamganhvac.jpg
+    - assets/images/danhthuctrithongminh.jpg
+    - assets/images/melamgicouocmo.jpg
+    - assets/images/nhungconsobietnoi.jpg
+    - assets/images/nhungnguoithichdua.jpg
+    - assets/images/nhungnguyentacthanhcong.jpg
+    - assets/images/quangganhlodi.jpg   
+    - assets/images/tugiac.jpg
+    - assets/images/tamlyhocbieucam.jpg
+    - assets/images/addBook.jpg
+    - assets/images/products.jpg
+    - assets/images/orders.jpg
+    - assets/images/information.jpg
+
     - assets/images/bookadvertise1.jpg
     - assets/images/bookadvertise2.jpg
     - assets/images/bookadvertise3.jpg

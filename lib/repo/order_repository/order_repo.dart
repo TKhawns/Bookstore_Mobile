@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, depend_on_referenced_packages, prefer_final_fields
+
 import 'dart:async';
 
 import 'package:dio/dio.dart';
@@ -25,6 +27,19 @@ class OrderRepo {
     return c.future;
   }
 
+  Future<bool> addToBooks(BookData bookData) async {
+    var c = Completer<bool>();
+    try {
+      var response = await _orderService.addToBook(bookData);
+      c.complete(true);
+    } on DioException {
+      c.completeError('Lỗi AddToBook');
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
+
   Future<ShoppingCart> getShoppingCartInfo() async {
     var c = Completer<ShoppingCart>();
     try {
@@ -39,11 +54,11 @@ class OrderRepo {
     return c.future;
   }
 
-  Future<List<BookData>> getOrderDetail() async {
+  Future<List<BookData>> getOrderDetail(String customerId) async {
     var c = Completer<List<BookData>>();
 
     try {
-      var response = await _orderService.orderDetail();
+      var response = await _orderService.orderDetail(customerId);
       var bookList = BookData.parseBookDataList(response.data);
       c.complete(bookList);
     } on DioException {
@@ -54,19 +69,6 @@ class OrderRepo {
     return c.future;
   }
 
-  // Future<List<BookData>> updateOrder(BookData bookData) async {
-  //   var c = Completer<List<BookData>>();
-  //   try {
-  //     var response = await _orderService.updateOrder(bookData);
-  //     var orderList = BookData.parseBookDataList(response.data);
-  //     c.complete(orderList);
-  //   } on DioException {
-  //     c.completeError('Lỗi update đơn hàng');
-  //   } catch (e) {
-  //     c.completeError(e);
-  //   }
-  //   return c.future;
-  // }
   Future<bool> updateOrder(BookData bookData) async {
     var c = Completer<bool>();
     try {

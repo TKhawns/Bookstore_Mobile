@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, unnecessary_null_comparison, unused_catch_clause
+// ignore_for_file: prefer_final_fields, unnecessary_null_comparison, unused_catch_clause, depend_on_referenced_packages
 
 import 'dart:async';
 

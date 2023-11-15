@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new
+// ignore_for_file: prefer_const_constructors, unnecessary_new, depend_on_referenced_packages, use_key_in_widget_constructors
 
 import 'package:bookstore_mobile/widget/scale_animation.dart';
 import 'package:flutter/material.dart';

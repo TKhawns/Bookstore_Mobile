@@ -9,6 +9,7 @@ import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import '../../base/base_bloc.dart';
 import '../../event/add_to_cart_event.dart';
 import '../../repo/author_repository/author_repo.dart';
+import '../../repo/user_repository/user_repo.dart';
 import '../../widget/shopping_cart.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -16,18 +17,22 @@ class HomeBloc extends BaseBloc {
   final BookRepo _bookRepo;
   final AuthorRepo _authorRepo;
   final OrderRepo _orderRepo;
+  final UserRepo _userRepo;
   static HomeBloc? _instance;
 
   var _shoppingCart = ShoppingCart(total: -1);
 
-  static HomeBloc? getInstance(
-      {required BookRepo bookRepo,
-      required AuthorRepo authorRepo,
-      required OrderRepo orderRepo}) {
+  static HomeBloc? getInstance({
+    required BookRepo bookRepo,
+    required AuthorRepo authorRepo,
+    required OrderRepo orderRepo,
+    required UserRepo userRepo,
+  }) {
     _instance ??= HomeBloc._internal(
       bookRepo: bookRepo,
       authorRepo: authorRepo,
       orderRepo: orderRepo,
+      userRepo: userRepo,
     );
 
     return _instance;
@@ -36,10 +41,12 @@ class HomeBloc extends BaseBloc {
   HomeBloc._internal(
       {required BookRepo bookRepo,
       required AuthorRepo authorRepo,
-      required OrderRepo orderRepo})
+      required OrderRepo orderRepo,
+      required UserRepo userRepo})
       : _bookRepo = bookRepo,
         _authorRepo = authorRepo,
-        _orderRepo = orderRepo;
+        _orderRepo = orderRepo,
+        _userRepo = userRepo;
 
   Stream<List<BookData>> getBookList() {
     return Stream<List<BookData>>.fromFuture(

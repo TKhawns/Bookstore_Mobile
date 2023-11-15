@@ -1,0 +1,171 @@
+// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, must_be_immutable, deprecated_member_use
+
+import 'package:bookstore_mobile/module/checkout/payment_bloc.dart';
+import 'package:bookstore_mobile/repo/payment_repository/payment_repo.dart';
+import 'package:bookstore_mobile/repo/payment_repository/payment_service.dart';
+import 'package:bookstore_mobile/widget/normalbutton.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
+
+// String computeSignature() {
+//   var requestId_time = DateTime.now().microsecondsSinceEpoch;
+//   String requestId = requestId_time.toString();
+//   print(requestId);
+//   String rawData =
+//       "partnerCode=MOMO&accessKey=F8BBA842ECF85&requestId=$requestId&amount=15000&orderId=$requestId&orderInfo=Payment Book&returnUrl=localhost:8080/home&notifyUrl=localhost:8080/home&extraData=trinhkhanhctdt@gmail.com";
+//   var key = utf8.encode("K951B6PE1waDMi640xX08PD3vg6EkVlz");
+//   var bytes = utf8.encode(rawData);
+//   var hmacSha256 = Hmac(sha256, key);
+//   var digest = hmacSha256.convert(bytes);
+
+//   return digest.toString();
+// }
+
+class PaymentWidget extends StatefulWidget {
+  @override
+  State<PaymentWidget> createState() => _PaymentWidgetState();
+}
+
+class _PaymentWidgetState extends State<PaymentWidget> {
+  // String signature = computeSignature();
+
+  Future<void> _launchUrl(String url) async {
+    Uri _url = Uri.parse(url);
+    if (!await launchUrl(_url,
+        mode: LaunchMode.inAppWebView, webOnlyWindowName: '_self')) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    PaymentBloc paymentBloc =
+        PaymentBloc(paymentRepo: PaymentRepo(paymentService: PaymentService()));
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Create Payment",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _buildCustomerName(),
+          Container(
+            height: 3,
+          ),
+          _buildContentPayment(),
+          Container(
+            height: 3,
+          ),
+          _buildAmount(),
+          Container(
+            height: 3,
+          ),
+          NormalButton(
+              title: "Xác nhận",
+              onPressed: () {
+                paymentBloc.getLinkPayment("Testpayment").listen((event) {
+                  print(event.payUrl);
+                  _launchUrl(event.payUrl);
+                });
+              })
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCustomerName() {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      height: 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 15),
+            child: Text(
+              "Tên khách hàng",
+              style: GoogleFonts.inter(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          TextField(
+            cursorColor: Colors.black,
+            obscureText: false,
+            decoration: InputDecoration(
+              hintText: "Enter text",
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContentPayment() {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      height: 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 15),
+            child: Text(
+              "Nội dung thanh toán",
+              style: GoogleFonts.inter(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          TextField(
+            cursorColor: Colors.black,
+            obscureText: false,
+            decoration: InputDecoration(
+              hintText: "Enter text",
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAmount() {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      height: 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 15),
+            child: Text(
+              "Số tiền",
+              style: GoogleFonts.inter(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          TextField(
+            cursorColor: Colors.black,
+            obscureText: false,
+            decoration: InputDecoration(
+              hintText: "10,000 VND",
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

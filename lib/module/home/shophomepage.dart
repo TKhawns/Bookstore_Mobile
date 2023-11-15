@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, must_be_immutable, unnecessary_null_comparison, avoid_unnecessary_containers, sized_box_for_whitespace
+// ignore_for_file: depend_on_referenced_packages, unnecessary_import, unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, must_be_immutable, unnecessary_null_comparison, avoid_unnecessary_containers, sized_box_for_whitespace, library_private_types_in_public_api, prefer_const_constructors_in_immutables
 
 import 'dart:ui';
 
@@ -16,8 +16,6 @@ import 'package:bookstore_mobile/repo/book_repository/book_service.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/widget/bloc_listener.dart';
-import 'package:bookstore_mobile/widget/navigator_item.dart';
-import 'package:bookstore_mobile/widget/shop_info.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/rendering.dart';
@@ -25,23 +23,26 @@ import 'package:provider/provider.dart';
 
 import '../../repo/author_repository/author_data.dart';
 import '../../repo/book_repository/book_data.dart';
+import '../../repo/user_repository/user_repo.dart';
+import '../../repo/user_repository/user_service.dart';
 import '../../widget/filter_widget.dart';
+import '../../widget/shop_navigator_item.dart';
 import '../../widget/shopping_cart.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class NewHomePage extends StatefulWidget {
+  const NewHomePage({super.key});
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<NewHomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<NewHomePage> {
   final TextEditingController _txtSearchTextController =
       TextEditingController();
 
   List<Filter> filters = getFilterList();
   Filter selectedFilter = Filter("");
-  List<NavigationItem> navigationItems = getNavigationItemList();
-  NavigationItem selectedItem = NavigationItem(Icons.book, "", "");
+  List<ShopNavigationItem> navigationItems = getShopNavigationItemList();
+  ShopNavigationItem selectedItem = ShopNavigationItem(Icons.book, "", "");
   List<BookData> bookData = [];
 
   SearchBookBloc searchBloc =
@@ -58,10 +59,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final Object? customerId = ModalRoute.of(context)!.settings.arguments;
     return MultiProvider(
       providers: [
-        Provider<HomePage>(
-          create: (_) => HomePage(),
+        Provider<NewHomePage>(
+          create: (_) => NewHomePage(),
+        ),
+        Provider.value(
+          value: UserService(),
+        ),
+        ProxyProvider<UserService, UserRepo>(
+          update: (context, userService, previous) =>
+              UserRepo(userService: userService),
         ),
         Provider.value(
           value: BookService(),
@@ -112,25 +121,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           actions: [
-            ShoppingCartWidget(),
-            // Container(
-            //     margin: EdgeInsets.only(top: 15, right: 30),
-            //     child: badges.Badge(
-            //       badgeContent: Text(
-            //         "0",
-            //         style: TextStyle(
-            //           color: Colors.white,
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //       ),
-            //       child: GestureDetector(
-            //         onTap: () {},
-            //         child: Icon(
-            //           Icons.shopping_cart,
-            //           size: 30,
-            //         ),
-            //       ),
-            //     )),
+            ShoppingCartWidget(
+              customerID: customerId as String,
+            ),
           ],
         ),
         body: Column(
@@ -203,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Famous Authors",
+                          "Famous Authors new",
                           style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -335,90 +328,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // List<Widget> buildAuthors() {
-  //   List<Widget> list = [];
-  //   for (var i = 0; i < authors.length; i++) {
-  //     list.add(buildAuthor(authors[i], i));
-  //   }
-  //   return list;
-  // }
-
-  // Widget buildAuthor(Author author, int index) {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => AuthorProfile(author: author)),
-  //       );
-  //     },
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         color: Colors.grey[200],
-  //         borderRadius: BorderRadius.all(Radius.circular(15)),
-  //       ),
-  //       padding: EdgeInsets.all(12),
-  //       margin: EdgeInsets.only(right: 36, left: index == 0 ? 16 : 0),
-  //       width: 255,
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: [
-  //           Card(
-  //             elevation: 4,
-  //             margin: EdgeInsets.all(0),
-  //             clipBehavior: Clip.antiAlias,
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.all(Radius.circular(15)),
-  //             ),
-  //             child: Container(
-  //               width: 75,
-  //               height: 75,
-  //               decoration: BoxDecoration(
-  //                 image: DecorationImage(
-  //                     image: AssetImage(author.image), fit: BoxFit.cover),
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(
-  //             width: 12,
-  //           ),
-  //           Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 author.fullName,
-  //                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  //               ),
-  //               Row(
-  //                 children: [
-  //                   Icon(
-  //                     Icons.library_books,
-  //                     color: Colors.grey,
-  //                     size: 18,
-  //                   ),
-  //                   SizedBox(
-  //                     width: 14,
-  //                     height: 24,
-  //                   ),
-  //                   Text(
-  //                     author.books.toString() + " books",
-  //                     style: TextStyle(
-  //                       fontSize: 14,
-  //                       color: Colors.grey,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   List<Widget> buildNavigationItems() {
     List<Widget> list = [];
     for (var i = 0; i < navigationItems.length; i++) {
@@ -427,7 +336,7 @@ class _HomePageState extends State<HomePage> {
     return list;
   }
 
-  Widget buildNavigationItem(NavigationItem item) {
+  Widget buildNavigationItem(ShopNavigationItem item) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -494,9 +403,11 @@ class BookListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context),
-          orderRepo: Provider.of(context),
-          authorRepo: Provider.of(context)),
+        bookRepo: Provider.of(context),
+        orderRepo: Provider.of(context),
+        authorRepo: Provider.of(context),
+        userRepo: Provider.of(context),
+      ),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
@@ -566,7 +477,7 @@ class BookListWidget extends StatelessWidget {
                 ),
                 margin: EdgeInsets.only(bottom: 16, top: 24),
                 child: Hero(
-                  tag: '${bookData.title}',
+                  tag: bookData.title,
                   child: Image.asset(
                     "assets/images/${bookData.image}",
                     fit: BoxFit.fitWidth,
@@ -575,7 +486,8 @@ class BookListWidget extends StatelessWidget {
               ),
             ),
             Text(
-              '${bookData.title}',
+              bookData.title,
+              maxLines: 2,
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black,
@@ -598,12 +510,15 @@ class BookListWidget extends StatelessWidget {
 
 class AuthorListWidget extends StatelessWidget {
   List<AuthorData> authorData = [];
+  @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context),
-          orderRepo: Provider.of(context),
-          authorRepo: Provider.of(context)),
+        bookRepo: Provider.of(context),
+        orderRepo: Provider.of(context),
+        authorRepo: Provider.of(context),
+        userRepo: Provider.of(context),
+      ),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getAuthorList().listen((event) {
           for (var author in event) {
@@ -703,7 +618,7 @@ class AuthorListWidget extends StatelessWidget {
                       height: 24,
                     ),
                     Text(
-                      author.number_books.toString() + " books",
+                      author.number_books + " books",
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
@@ -722,6 +637,9 @@ class AuthorListWidget extends StatelessWidget {
 }
 
 class ShoppingCartWidget extends StatelessWidget {
+  final String customerID;
+  ShoppingCartWidget({required this.customerID});
+
   @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
@@ -729,13 +647,19 @@ class ShoppingCartWidget extends StatelessWidget {
         bookRepo: Provider.of(context),
         orderRepo: Provider.of(context),
         authorRepo: Provider.of(context),
+        userRepo: Provider.of(context),
       ),
-      child: CartWidget(),
+      child: CartWidget(
+        customerID: customerID,
+      ),
     );
   }
 }
 
 class CartWidget extends StatefulWidget {
+  final String customerID;
+  CartWidget({required this.customerID});
+
   @override
   _CartWidgetState createState() => _CartWidgetState();
 }
@@ -774,7 +698,8 @@ class _CartWidgetState extends State<CartWidget> {
               }
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/checkout");
+                  Navigator.pushNamed(context, "/checkout",
+                      arguments: widget.customerID);
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 15, right: 20),

@@ -1,12 +1,13 @@
-// ignore_for_file: prefer_const_constructors, unused_import
+// ignore_for_file: prefer_const_constructors, unused_import, depend_on_referenced_packages, prefer_const_literals_to_create_immutables, sort_child_properties_last, avoid_print
 
 import 'package:bookstore_mobile/base/base_bloc.dart';
 import 'package:bookstore_mobile/base/base_event.dart';
 import 'package:bookstore_mobile/base/base_widget.dart';
-import 'package:bookstore_mobile/module/home/home_page.dart';
+import 'package:bookstore_mobile/module/home/user_home_page.dart';
 import 'package:bookstore_mobile/module/signin/signin_bloc.dart';
 import 'package:bookstore_mobile/module/signin/signin_fail.dart';
 import 'package:bookstore_mobile/module/signin/signin_success.dart';
+import 'package:bookstore_mobile/module/signin/signin_success_shop.dart';
 import 'package:bookstore_mobile/widget/loading_task.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +29,8 @@ class SignInPage extends StatelessWidget {
         di: [
           Provider.value(value: UserService()),
           ProxyProvider<UserService, UserRepo>(
-            update: (context, UserService, previous) =>
-                UserRepo(userService: UserService),
+            update: (context, userService, previous) =>
+                UserRepo(userService: userService),
           ),
         ],
         child: SignInFormWidget());
@@ -50,7 +51,11 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
   // code of check validate Sign in here
   handleEvent(BaseEvent event) {
     if (event is SignInSuccessEvent) {
-      Navigator.pushReplacementNamed(context, "/home");
+      Navigator.pushReplacementNamed(context, "/home",
+          arguments: event.userData.id);
+    } else if (event is ShopSignInSuccessEvent) {
+      Navigator.pushReplacementNamed(context, '/newhome',
+          arguments: event.userData.id);
     }
 
     if (event is SignInFailEvent) {
@@ -175,23 +180,21 @@ class _SignInFormWidgetState extends State<SignInFormWidget> {
   }
 
   Widget _buildFooter() {
-    return Container(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(4.0),
-            )),
-        child: Text(
-          "Đăng ký",
-          style: TextStyle(
-              fontSize: 20, color: const Color.fromARGB(255, 0, 151, 178)),
-        ),
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, "/sign-up");
-        },
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          )),
+      child: Text(
+        "Đăng ký",
+        style: TextStyle(
+            fontSize: 20, color: const Color.fromARGB(255, 0, 151, 178)),
       ),
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, "/sign-up");
+      },
     );
   }
 

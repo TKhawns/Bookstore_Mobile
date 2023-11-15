@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, avoid_print
 
 import 'package:bookstore_mobile/event/delete_order_event.dart';
 
@@ -13,25 +13,29 @@ import 'package:rxdart/rxdart.dart';
 class CheckoutBloc extends BaseBloc {
   final OrderRepo _orderRepo;
 
-  CheckoutBloc({
-    required OrderRepo orderRepo,
-  }) : _orderRepo = orderRepo;
+  CheckoutBloc({required OrderRepo orderRepo}) : _orderRepo = orderRepo;
 
   final _orderSubject = BehaviorSubject<List<BookData>>();
 
   Stream<List<BookData>> get orderStream => _orderSubject.stream;
   Sink<List<BookData>> get orderSink => _orderSubject.sink;
 
+  final _customerIdSubject = BehaviorSubject<String>();
+  Stream<String> get customerIdStream => _customerIdSubject.stream;
+  Sink<String> get customerIdSink => _customerIdSubject.sink;
+
   @override
   void dispatchEvent(BaseEvent event) {
     switch (event.runtimeType) {
       case UpdateCartEvent:
         handleUpdateCart(event);
-        getOrderDetail();
+        UpdateCartEvent e = event as UpdateCartEvent;
+        getOrderDetail(e.customerId);
         break;
       case DeleteOrderEvent:
         handleDeleteOrder(event);
-        getOrderDetail();
+        UpdateCartEvent e = event as UpdateCartEvent;
+        getOrderDetail(e.customerId);
         break;
     }
   }
@@ -42,12 +46,6 @@ class CheckoutBloc extends BaseBloc {
   //   });
   // }
 
-  // handleUpdateCart(event) {
-  //   UpdateCartEvent updateCartEvent = event as UpdateCartEvent;
-  //   _orderRepo.updateOrder(updateCartEvent.bookData).then((updateCart) {
-  //     orderSink.add(updateCart);
-  //   });
-  // }
   handleUpdateCart(event) {
     UpdateCartEvent e = event as UpdateCartEvent;
     _orderRepo.updateOrder(e.bookData).then((isSuccess) {
@@ -66,9 +64,9 @@ class CheckoutBloc extends BaseBloc {
     });
   }
 
-  Stream<List<BookData>> getOrderDetail() {
+  Stream<List<BookData>> getOrderDetail(String customerId) {
     return Stream<List<BookData>>.fromFuture(
-      _orderRepo.getOrderDetail(),
+      _orderRepo.getOrderDetail(customerId),
     );
   }
 

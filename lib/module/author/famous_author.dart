@@ -12,8 +12,11 @@ import 'package:flutter/material.dart';
 import '../../repo/author_repository/author_data.dart';
 import '../../repo/book_repository/book_repo.dart';
 import '../../repo/book_repository/book_service.dart';
+import '../../repo/user_repository/user_repo.dart';
+import '../../repo/user_repository/user_service.dart';
 import '../home/home_bloc.dart';
 import 'author_profile.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FamousAuthor extends StatefulWidget {
   const FamousAuthor({super.key});
@@ -23,7 +26,6 @@ class FamousAuthor extends StatefulWidget {
 }
 
 class _FamoousAuthorState extends State<FamousAuthor> {
-  //List<Book> books = getBookList();
   List<AuthorData> authorData = [];
 
   @override
@@ -32,6 +34,13 @@ class _FamoousAuthorState extends State<FamousAuthor> {
       providers: [
         Provider<FamousAuthor>(
           create: (_) => FamousAuthor(),
+        ),
+        Provider.value(
+          value: UserService(),
+        ),
+        ProxyProvider<UserService, UserRepo>(
+          update: (context, userService, previous) =>
+              UserRepo(userService: userService),
         ),
         Provider.value(
           value: BookService(),
@@ -60,7 +69,7 @@ class _FamoousAuthorState extends State<FamousAuthor> {
           centerTitle: true,
           title: Text(
             "Famous Authors",
-            style: TextStyle(color: Colors.white, fontSize: 25),
+            style: GoogleFonts.inter(color: Colors.white, fontSize: 25),
           ),
         ),
         body: ScrollConfiguration(
@@ -84,9 +93,11 @@ class AuthorListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context),
-          orderRepo: Provider.of(context),
-          authorRepo: Provider.of(context)),
+        bookRepo: Provider.of(context),
+        orderRepo: Provider.of(context),
+        authorRepo: Provider.of(context),
+        userRepo: Provider.of(context),
+      ),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getAuthorList().listen((event) {
           for (var author in event) {
@@ -149,20 +160,24 @@ class AuthorListWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 15, left: 30, right: 10),
+                    margin: EdgeInsets.only(top: 15, left: 15, right: 10),
                     child: Text(
                       author.full_name,
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 20,
                         color: Colors.black,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 5, left: 30),
+                    margin: EdgeInsets.only(top: 5, left: 15),
                     child: Text(
                       "${author.number_books} books",
-                      style: TextStyle(color: Colors.blue, fontSize: 17),
+                      style: GoogleFonts.inter(
+                          color: Colors.blue,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                   Expanded(
@@ -195,8 +210,10 @@ class AuthorListWidget extends StatelessWidget {
                             },
                             child: Text(
                               'Learn more',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500),
                             ),
                           ),
                         ),

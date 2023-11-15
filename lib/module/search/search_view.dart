@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, must_be_immutable
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, must_be_immutable, sized_box_for_whitespace, avoid_print, depend_on_referenced_packages
 
 import 'dart:ui';
 
@@ -8,6 +8,8 @@ import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
+import 'package:bookstore_mobile/repo/user_repository/user_repo.dart';
+import 'package:bookstore_mobile/repo/user_repository/user_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../repo/book_repository/book_repo.dart';
@@ -53,6 +55,13 @@ class _SearchViewState extends State<SearchView> {
       providers: [
         Provider<SearchView>(
           create: (_) => SearchView(),
+        ),
+        Provider.value(
+          value: UserService(),
+        ),
+        ProxyProvider<UserService, UserRepo>(
+          update: (context, userService, previous) =>
+              UserRepo(userService: userService),
         ),
         Provider.value(
           value: BookService(),
@@ -142,16 +151,19 @@ class BookListWidget extends StatefulWidget {
 class _BookListWidgetState extends State<BookListWidget> {
   List<BookData> bookData = [];
 
+  @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
       value: HomeBloc.getInstance(
-          bookRepo: Provider.of(context),
-          orderRepo: Provider.of(context),
-          authorRepo: Provider.of(context)),
+        bookRepo: Provider.of(context),
+        orderRepo: Provider.of(context),
+        authorRepo: Provider.of(context),
+        userRepo: Provider.of(context),
+      ),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
           for (var book in event) {
-            bookData.add(book);
+            if (book.title.contains(query)) bookData.add(book);
           }
         });
         return StreamProvider<List<BookData>?>.value(

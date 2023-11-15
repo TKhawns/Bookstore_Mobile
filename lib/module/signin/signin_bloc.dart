@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, avoid_print, depend_on_referenced_packages
+
 import 'dart:async';
 
 import 'package:bookstore_mobile/base/base_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:bookstore_mobile/event/signin_event.dart';
 import 'package:bookstore_mobile/event/signup_event.dart';
 import 'package:bookstore_mobile/module/signin/signin_fail.dart';
 import 'package:bookstore_mobile/module/signin/signin_success.dart';
+import 'package:bookstore_mobile/module/signin/signin_success_shop.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../repo/user_repository/user_repo.dart';
 import '../../widget/validation.dart';
@@ -59,7 +62,6 @@ class SignInBloc extends BaseBloc {
 
   @override
   void dispatchEvent(BaseEvent event) {
-    // TODO: implement dispatchEvent
     switch (event.runtimeType) {
       case SignInEvent:
         handleSignIn(event);
@@ -76,7 +78,11 @@ class SignInBloc extends BaseBloc {
     Future.delayed(Duration(seconds: 0), () {
       SignInEvent e = event as SignInEvent;
       _userRepo.signIn(e.phone, e.pass).then((userData) {
-        processEventSink.add(SignInSuccessEvent(userData));
+        if (userData.role == 'member')
+          processEventSink.add(SignInSuccessEvent(userData));
+        else {
+          processEventSink.add(ShopSignInSuccessEvent(userData));
+        }
         loadingSink.add(false);
         btnSink.add(true);
         print(userData);

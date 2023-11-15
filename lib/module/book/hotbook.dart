@@ -14,10 +14,13 @@ import 'package:badges/badges.dart' as badges;
 
 import '../../repo/book_repository/book_repo.dart';
 import '../../repo/book_repository/book_service.dart';
+import '../../repo/user_repository/user_repo.dart';
+import '../../repo/user_repository/user_service.dart';
 import '../../widget/shopping_cart.dart';
 import '../home/book_detail.dart';
 import '../home/home_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HotBook extends StatefulWidget {
   const HotBook({super.key});
@@ -35,6 +38,13 @@ class _HotBookState extends State<HotBook> {
       providers: [
         Provider<HotBook>(
           create: (_) => HotBook(),
+        ),
+        Provider.value(
+          value: UserService(),
+        ),
+        ProxyProvider<UserService, UserRepo>(
+          update: (context, userService, previous) =>
+              UserRepo(userService: userService),
         ),
         Provider.value(
           value: BookService(),
@@ -63,7 +73,7 @@ class _HotBookState extends State<HotBook> {
           centerTitle: true,
           title: Text(
             "Hot Books",
-            style: TextStyle(color: Colors.white, fontSize: 25),
+            style: GoogleFonts.inter(color: Colors.white, fontSize: 25),
           ),
           backgroundColor: const Color.fromARGB(255, 0, 151, 178),
           actions: [
@@ -94,6 +104,7 @@ class BookListWidget extends StatelessWidget {
         bookRepo: Provider.of(context),
         authorRepo: Provider.of(context),
         orderRepo: Provider.of(context),
+        userRepo: Provider.of(context),
       ),
       child: Consumer<HomeBloc>(builder: (context, bloc, child) {
         bloc.getBookList().listen((event) {
@@ -170,17 +181,18 @@ class BookListWidget extends StatelessWidget {
                     margin: EdgeInsets.only(top: 15, left: 15, right: 10),
                     child: Text(
                       book.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
+                      style: GoogleFonts.inter(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 5, left: 15),
                     child: Text(
                       "${book.count} books",
-                      style: TextStyle(color: Colors.blue, fontSize: 17),
+                      style:
+                          GoogleFonts.inter(color: Colors.blue, fontSize: 17),
                     ),
                   ),
                   Container(
@@ -223,7 +235,7 @@ class BookListWidget extends StatelessWidget {
                         margin: EdgeInsets.only(top: 5, left: 15),
                         child: Text(
                           '${MoneyFormatter(amount: double.parse(book.cost)).output.withoutFractionDigits} VND',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                               color: Colors.red,
                               fontSize: 17,
                               fontWeight: FontWeight.bold),
@@ -248,7 +260,8 @@ class BookListWidget extends StatelessWidget {
                           ),
                           child: Text(
                             ' Buy now ',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            style: GoogleFonts.inter(
+                                color: Colors.white, fontSize: 18),
                           ),
                         ),
                       )
@@ -272,6 +285,7 @@ class ShoppingCartWidget extends StatelessWidget {
         bookRepo: Provider.of(context),
         orderRepo: Provider.of(context),
         authorRepo: Provider.of(context),
+        userRepo: Provider.of(context),
       ),
       child: CartWidget(),
     );
@@ -317,14 +331,15 @@ class _CartWidgetState extends State<CartWidget> {
               }
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/checkout");
+                  Navigator.pushNamed(context, "/checkout",
+                      arguments: "3af298e0-e126-4ce0-b957-b637869b2da3");
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 15, right: 20),
                   child: badges.Badge(
                     badgeContent: Text(
                       "${value.total}",
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),

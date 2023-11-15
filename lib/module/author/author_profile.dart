@@ -4,6 +4,7 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../repo/author_repository/author_data.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthorProfile extends StatefulWidget {
   final AuthorData author;
@@ -34,7 +35,7 @@ class _AuthorProfileState extends State<AuthorProfile> {
         centerTitle: true,
         title: Text(
           "About Author",
-          style: TextStyle(color: Colors.white, fontSize: 25),
+          style: GoogleFonts.inter(color: Colors.white, fontSize: 25),
         ),
         backgroundColor: const Color.fromARGB(255, 0, 151, 178),
       ),
@@ -64,7 +65,7 @@ class _AuthorProfileState extends State<AuthorProfile> {
                         children: [
                           Text(
                             widget.author.full_name,
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                                 fontSize: 28,
                                 height: 1,
                                 fontWeight: FontWeight.bold),
@@ -77,7 +78,7 @@ class _AuthorProfileState extends State<AuthorProfile> {
                               physics: BouncingScrollPhysics(),
                               child: Text(
                                 widget.author.description,
-                                style: TextStyle(
+                                style: GoogleFonts.inter(
                                   fontSize: 18,
                                 ),
                               ),

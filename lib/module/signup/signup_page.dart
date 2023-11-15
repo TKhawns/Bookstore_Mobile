@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:bookstore_mobile/base/base_widget.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
@@ -29,8 +29,8 @@ class SignUpPage extends StatelessWidget {
             value: UserService(),
           ),
           ProxyProvider<UserService, UserRepo>(
-            update: (context, UserService, previous) =>
-                UserRepo(userService: UserService),
+            update: (context, userService, previous) =>
+                UserRepo(userService: userService),
           ),
         ],
         bloc: [],
@@ -53,7 +53,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 
   handleEvent(BaseEvent event) {
     if (event is SignUpSuccessEvent) {
-      Navigator.pushReplacementNamed(context, "/home");
+      Navigator.pushReplacementNamed(context, "/home",
+          arguments: event.userData.id);
     }
     if (event is SignUpFailEvent) {
       final snackBar = SnackBar(
@@ -190,27 +191,25 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   }
 
   Widget _buildFooter() {
-    return Container(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(4.0),
-            )),
-        child: Text(
-          "Đăng nhập",
-          style: TextStyle(
-              fontSize: 20, color: const Color.fromARGB(255, 0, 151, 178)),
-        ),
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => SignInPage()),
-            ModalRoute.withName('/sign-in'),
-          );
-        },
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          )),
+      child: Text(
+        "Đăng nhập",
+        style: TextStyle(
+            fontSize: 20, color: const Color.fromARGB(255, 0, 151, 178)),
       ),
+      onPressed: () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => SignInPage()),
+          ModalRoute.withName('/sign-in'),
+        );
+      },
     );
   }
 }

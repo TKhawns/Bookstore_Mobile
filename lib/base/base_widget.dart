@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import '../module/signin/signin_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PageContainer extends StatelessWidget {
   final String title;
@@ -35,7 +36,7 @@ class PageContainer extends StatelessWidget {
           centerTitle: true,
           title: Text(
             title,
-            style: TextStyle(color: Colors.white, fontSize: 25),
+            style: GoogleFonts.inter(color: Colors.white, fontSize: 25),
           ),
         ),
         body: child,

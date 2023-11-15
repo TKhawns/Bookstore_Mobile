@@ -1,18 +1,20 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_const_constructors
 
 import 'package:bookstore_mobile/module/checkout/checkout.dart';
-import 'package:bookstore_mobile/module/home/home_page.dart';
+import 'package:bookstore_mobile/module/home/user_home_page.dart';
 import 'package:bookstore_mobile/module/author/famous_author.dart';
 import 'package:bookstore_mobile/module/book/hotbook.dart';
 import 'package:bookstore_mobile/module/page/profile.dart';
 import 'package:bookstore_mobile/module/search/search_view.dart';
 import 'package:bookstore_mobile/module/shop/myshop.dart';
-import 'package:bookstore_mobile/module/shop/shop_info.dart';
 import 'package:bookstore_mobile/module/shop/showdialog.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:bookstore_mobile/module/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
+import 'module/home/shophomepage.dart';
+import 'module/dashboard/dash_board.dart';
+import 'dart:ui';
 
 void main() {
   runApp(DevicePreview(enabled: true, builder: ((context) => MyApp())));
@@ -43,9 +45,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: primeColor,
       ),
-      initialRoute: "/",
+      initialRoute: "/sign-in",
       routes: <String, WidgetBuilder>{
-        "/": (context) => SignInPage(),
+        "/": (context) => HotBook(),
         "/sign-up": (context) => SignUpPage(),
         "/sign-in": (context) => SignInPage(),
         "/home": (context) => HomePage(),
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
         "/checkout": (context) => CheckoutWidget(),
         "/myshop": (context) => MyshopWidget(),
         "/showdialog": (context) => ShowDialogWidget(),
+        "/newhome": (context) => NewHomePage(),
+        "/dashboard": (context) => DashBoardPage(),
       },
       //home: SignInPage(),
     );

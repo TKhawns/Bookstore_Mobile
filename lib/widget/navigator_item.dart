@@ -4,6 +4,7 @@ class NavigationItem {
   final String title;
   final String path;
   final IconData iconData;
+  // final String customerId;
   NavigationItem(this.iconData, this.title, this.path);
 }
 

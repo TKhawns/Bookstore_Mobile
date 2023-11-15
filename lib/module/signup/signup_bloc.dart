@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, avoid_print, prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:bookstore_mobile/module/signup/signup_fail.dart';
@@ -116,7 +118,6 @@ class SignUpBloc extends BaseBloc {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _displayNameSubject.close();
     _phoneSubject.close();

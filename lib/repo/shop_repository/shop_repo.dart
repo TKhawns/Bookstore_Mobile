@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, prefer_final_fields
+
 import 'dart:async';
 
 import 'package:bookstore_mobile/repo/shop_repository/shop_data.dart';
