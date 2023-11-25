@@ -189,7 +189,9 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PaymentWidget()),
+                                                    PaymentWidget(
+                                                        customerId:
+                                                            widget.customerId)),
                                           );
                                         },
                                         child: Text(
@@ -256,6 +258,7 @@ Widget newbuildBook(BookData book, int index, BuildContext context,
                   margin: EdgeInsets.only(top: 15, left: 15, right: 10),
                   child: Text(
                     book.title,
+                    maxLines: 1,
                     style: GoogleFonts.inter(
                         fontSize: 20,
                         color: Colors.black,
@@ -287,7 +290,7 @@ Widget newbuildBook(BookData book, int index, BuildContext context,
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(left: 15, top: 10),
+                          padding: EdgeInsets.only(left: 15, top: 5),
                           child: Row(
                             children: [
                               BtnCartAction(
@@ -329,7 +332,7 @@ Widget newbuildBook(BookData book, int index, BuildContext context,
                       margin: EdgeInsets.only(right: 15),
                       child: ElevatedButton(
                         onPressed: () {
-                          bloc.event.add(DeleteOrderEvent(book));
+                          bloc.event.add(DeleteOrderEvent(book, customerId));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 0, 151, 178),

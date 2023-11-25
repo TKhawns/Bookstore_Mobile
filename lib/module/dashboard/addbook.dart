@@ -164,6 +164,7 @@ class _AddBookPageState extends State<AddBookPageWidget> {
                             shop_image:
                                 "https://i.pinimg.com/564x/41/75/fd/4175fd839e97e8af3fc8ad862ad4950f.jpg",
                             quantity: "1"),
+                        "3af298e0-e126-4ce0-b957-b637869b2da3",
                       ));
                     },
                   ),

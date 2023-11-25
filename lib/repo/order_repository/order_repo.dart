@@ -13,11 +13,11 @@ class OrderRepo {
   OrderRepo({required OrderService orderService})
       : _orderService = orderService;
 
-  Future<ShoppingCart> addToCart(BookData bookData) async {
+  Future<ShoppingCart> addToCart(BookData bookData, String customerId) async {
     var c = Completer<ShoppingCart>();
     try {
-      var response = await _orderService.addToCart(bookData);
-      var shoppingCart = ShoppingCart.fromJson(response.data['data']);
+      var response = await _orderService.addToCart(bookData, customerId);
+      var shoppingCart = ShoppingCart.fromJson(response.data);
       c.complete(shoppingCart);
     } on DioException {
       c.completeError('Lỗi AddToCart');
@@ -40,10 +40,10 @@ class OrderRepo {
     return c.future;
   }
 
-  Future<ShoppingCart> getShoppingCartInfo() async {
+  Future<ShoppingCart> getShoppingCartInfo(String customerId) async {
     var c = Completer<ShoppingCart>();
     try {
-      var response = await _orderService.countShoppingCart();
+      var response = await _orderService.countShoppingCart(customerId);
       var shoppingCart = ShoppingCart.fromJson(response.data);
       c.complete(shoppingCart);
     } on DioException {
@@ -69,10 +69,10 @@ class OrderRepo {
     return c.future;
   }
 
-  Future<bool> updateOrder(BookData bookData) async {
+  Future<bool> updateOrder(BookData bookData, String customerId) async {
     var c = Completer<bool>();
     try {
-      await _orderService.updateOrder(bookData);
+      await _orderService.updateOrder(bookData, customerId);
       c.complete(true);
     } on DioException {
       c.completeError('Lỗi update đơn hàng');
@@ -82,10 +82,36 @@ class OrderRepo {
     return c.future;
   }
 
-  Future<bool> deleteOrder(BookData bookData) async {
+  Future<bool> confirmOrder() async {
     var c = Completer<bool>();
     try {
-      await _orderService.deleteOrder(bookData);
+      await _orderService.confirmOrder();
+      c.complete(true);
+    } on DioException {
+      c.completeError('Lỗi confirm đơn hàng');
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
+
+  Future<bool> setPaymentStatus(String customerId) async {
+    var c = Completer<bool>();
+    try {
+      await _orderService.setPaymentStatus(customerId);
+      c.complete(true);
+    } on DioException {
+      c.completeError('Lỗi set payment status đơn hàng');
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
+
+  Future<bool> deleteOrder(BookData bookData, String customerId) async {
+    var c = Completer<bool>();
+    try {
+      await _orderService.deleteOrder(bookData, customerId);
       c.complete(true);
     } on DioException {
       c.completeError('Lỗi update đơn hàng');

@@ -212,7 +212,10 @@ class _BookListWidgetState extends State<BookListWidget> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BookDetail(bookData: book)),
+                        builder: (context) => BookDetail(
+                              bookData: book,
+                              customerId: "",
+                            )),
                   );
                 },
                 child: ClipRRect(

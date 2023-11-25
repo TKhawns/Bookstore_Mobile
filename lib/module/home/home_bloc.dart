@@ -1,6 +1,8 @@
 // ignore_for_file: unused_field, prefer_final_fields, depend_on_referenced_packages
 
 import 'package:bookstore_mobile/base/base_event.dart';
+import 'package:bookstore_mobile/event/fail_add_to_cart_event.dart';
+import 'package:bookstore_mobile/event/success_add_to_cart_event.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_data.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_repo.dart';
@@ -71,25 +73,29 @@ class HomeBloc extends BaseBloc {
   Sink<ShoppingCart> get shoppingCartSink => _shoppingCardSubject.sink;
 
   @override
-  void dispatchEvent(BaseEvent event) {
+  void dispatchEvent(BaseEvent event) async {
     switch (event.runtimeType) {
       case AddToCartEvent:
         handleAddToCart(event);
-        getShoppingCartInfo();
+        //getShoppingCartInfo(e.customerId);
         break;
     }
   }
 
   handleAddToCart(event) {
-    AddToCartEvent addToCartEvent = event as AddToCartEvent;
-    _orderRepo.addToCart(addToCartEvent.bookData).then((shoppingCart) {
+    AddToCartEvent e = event as AddToCartEvent;
+    _orderRepo.addToCart(e.bookData, e.customerId).then((shoppingCart) {
+      processEventSink.add(SuccessAddToCardEvent());
       shoppingCartSink.add(shoppingCart);
+    }, onError: (e) {
+      print(e.toString());
+      processEventSink.add(FailAddToCartEvent(e.toString()));
     });
   }
 
-  getShoppingCartInfo() {
-    Stream<ShoppingCart>.fromFuture(_orderRepo.getShoppingCartInfo()).listen(
-        (shoppingCart) {
+  getShoppingCartInfo(String customerId) {
+    Stream<ShoppingCart>.fromFuture(_orderRepo.getShoppingCartInfo(customerId))
+        .listen((shoppingCart) {
       _shoppingCart = shoppingCart;
       shoppingCartSink.add(shoppingCart);
     }, onError: (err) {

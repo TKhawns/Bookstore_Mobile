@@ -23,7 +23,8 @@ import 'home_bloc.dart';
 
 class BookDetail extends StatefulWidget {
   final BookData bookData;
-  BookDetail({required this.bookData});
+  final String customerId;
+  BookDetail({required this.bookData, required this.customerId});
 
   @override
   State<BookDetail> createState() => _BookDetailState();
@@ -63,19 +64,21 @@ class _BookDetailState extends State<BookDetail> {
       providers: [
         Provider<BookDetail>(
           create: (_) => BookDetail(
-              bookData: BookData(
-                  book_id: 0,
-                  title: 'title',
-                  description: 'description',
-                  score: 'score',
-                  image: 'image',
-                  cost: 'cost',
-                  count: 1,
-                  shipCost: 'shipCost',
-                  authorName: 'authorName',
-                  shopName: 'shopName',
-                  shop_image: 'shop_image',
-                  quantity: 'quantity')),
+            bookData: BookData(
+                book_id: 0,
+                title: 'title',
+                description: 'description',
+                score: 'score',
+                image: 'image',
+                cost: 'cost',
+                count: 1,
+                shipCost: 'shipCost',
+                authorName: 'authorName',
+                shopName: 'shopName',
+                shop_image: 'shop_image',
+                quantity: 'quantity'),
+            customerId: "",
+          ),
         ),
         Provider.value(
           value: UserService(),
@@ -448,7 +451,12 @@ class _BookDetailState extends State<BookDetail> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChatShopPage()),
+                    MaterialPageRoute(
+                        builder: (context) => ChatShopPage(
+                              customerId: widget.customerId,
+                              shopName: widget.bookData.shopName,
+                              shopImage: widget.bookData.shop_image,
+                            )),
                   );
                 },
                 child: Container(
@@ -536,7 +544,7 @@ class _CartWidgetState extends State<CartWidget> {
     super.didChangeDependencies();
 
     var bloc = Provider.of<HomeBloc>(context);
-    bloc.getShoppingCartInfo();
+    bloc.getShoppingCartInfo("3af298e0-e126-4ce0-b957-b637869b2da3");
   }
 
   @override

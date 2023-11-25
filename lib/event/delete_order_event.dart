@@ -3,6 +3,7 @@ import '../base/base_event.dart';
 
 class DeleteOrderEvent extends BaseEvent {
   BookData bookData;
+  String customerId;
 
-  DeleteOrderEvent(this.bookData);
+  DeleteOrderEvent(this.bookData, this.customerId);
 }

@@ -1,13 +1,15 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors
+// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, unnecessary_import
 
 import 'package:bookstore_mobile/module/checkout/checkout.dart';
+import 'package:bookstore_mobile/module/checkout/payment.dart';
+import 'package:bookstore_mobile/module/confirm/confirm_page.dart';
 import 'package:bookstore_mobile/module/home/user_home_page.dart';
 import 'package:bookstore_mobile/module/author/famous_author.dart';
 import 'package:bookstore_mobile/module/book/hotbook.dart';
 import 'package:bookstore_mobile/module/page/profile.dart';
 import 'package:bookstore_mobile/module/search/search_view.dart';
 import 'package:bookstore_mobile/module/shop/myshop.dart';
-import 'package:bookstore_mobile/module/shop/showdialog.dart';
+import 'package:bookstore_mobile/module/shop/register_shop.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:bookstore_mobile/module/signup/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/sign-in",
       routes: <String, WidgetBuilder>{
-        "/": (context) => HotBook(),
+        "/": (context) => ConfirmPage(),
         "/sign-up": (context) => SignUpPage(),
         "/sign-in": (context) => SignInPage(),
         "/home": (context) => HomePage(),

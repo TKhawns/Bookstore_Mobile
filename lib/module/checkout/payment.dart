@@ -1,6 +1,10 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, must_be_immutable, deprecated_member_use
+// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, must_be_immutable, deprecated_member_use, no_leading_underscores_for_local_identifiers, avoid_print
 
+import 'package:bookstore_mobile/module/checkout/checkout_bloc.dart';
 import 'package:bookstore_mobile/module/checkout/payment_bloc.dart';
+import 'package:bookstore_mobile/module/checkout/payment_event.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
+import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/repo/payment_repository/payment_repo.dart';
 import 'package:bookstore_mobile/repo/payment_repository/payment_service.dart';
 import 'package:bookstore_mobile/widget/normalbutton.dart';
@@ -24,6 +28,9 @@ import 'package:url_launcher/url_launcher.dart';
 // }
 
 class PaymentWidget extends StatefulWidget {
+  final String customerId;
+  PaymentWidget({required this.customerId});
+
   @override
   State<PaymentWidget> createState() => _PaymentWidgetState();
 }
@@ -43,6 +50,8 @@ class _PaymentWidgetState extends State<PaymentWidget> {
   Widget build(BuildContext context) {
     PaymentBloc paymentBloc =
         PaymentBloc(paymentRepo: PaymentRepo(paymentService: PaymentService()));
+    CheckoutBloc bloc =
+        CheckoutBloc(orderRepo: OrderRepo(orderService: OrderService()));
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -72,6 +81,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
           NormalButton(
               title: "Xác nhận",
               onPressed: () {
+                bloc.event.add(PaymentEvent(widget.customerId));
                 paymentBloc.getLinkPayment("Testpayment").listen((event) {
                   print(event.payUrl);
                   _launchUrl(event.payUrl);

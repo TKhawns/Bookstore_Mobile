@@ -6,13 +6,13 @@ import 'package:dio/dio.dart';
 import '../../database/dio_get.dart';
 
 class OrderService {
-  Future<Response> countShoppingCart() {
-    return BookClient.instance.dio.get(
-      '/order/count',
-    );
+  Future<Response> countShoppingCart(String customerId) {
+    return BookClient.instance.dio.post('/order/count', data: {
+      'customer_id': customerId,
+    });
   }
 
-  Future<Response> addToCart(BookData bookData) {
+  Future<Response> addToCart(BookData bookData, String customerId) {
     return BookClient.instance.dio.post(
       '/order/add',
       data: {
@@ -28,6 +28,7 @@ class OrderService {
         "number_books": bookData.count,
         "image": bookData.image,
         "quantity": bookData.quantity,
+        "customerId": customerId,
       },
     );
   }
@@ -61,21 +62,38 @@ class OrderService {
     );
   }
 
-  Future<Response> updateOrder(BookData bookData) {
+  Future<Response> updateOrder(BookData bookData, String customerId) {
     return BookClient.instance.dio.post(
       '/order/update',
       data: {
         'order_id': bookData.book_id,
         'quantity': bookData.quantity,
+        'customer_id': customerId,
       },
     );
   }
 
-  Future<Response> deleteOrder(BookData bookData) {
+  Future<Response> confirmOrder() {
+    return BookClient.instance.dio.get(
+      '/order/confirm',
+    );
+  }
+
+  Future<Response> setPaymentStatus(String customerId) {
+    return BookClient.instance.dio.post(
+      '/order/payment_status',
+      data: {
+        'customerId': customerId,
+      },
+    );
+  }
+
+  Future<Response> deleteOrder(BookData bookData, String customerId) {
     return BookClient.instance.dio.post(
       '/order/delete',
       data: {
         'order_id': bookData.book_id,
+        'customerId': customerId,
       },
     );
   }

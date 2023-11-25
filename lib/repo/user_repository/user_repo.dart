@@ -42,4 +42,16 @@ class UserRepo {
     }
     return c.future;
   }
+
+  Future<UserData> getUserInfo(String customerId) async {
+    var c = Completer<UserData>();
+    try {
+      var response = await _userService.getUserInfo(customerId);
+      var userData = UserData.fromJsonInfo(response.data['data']);
+      c.complete(userData);
+    } on DioException catch (e) {
+      c.completeError("Get information fail");
+    }
+    return c.future;
+  }
 }

@@ -1,41 +1,69 @@
-// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, sized_box_for_whitespace, unused_local_variable
 
+import 'package:bookstore_mobile/module/dashboard/dash_board_bloc.dart';
 import 'package:bookstore_mobile/module/dashboard/editBook.dart';
+import 'package:bookstore_mobile/repo/shop_repository/shop_repo.dart';
+import 'package:bookstore_mobile/repo/shop_repository/shop_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:provider/provider.dart';
 import 'addbook.dart';
 
-class DashBoardPage extends StatefulWidget {
+class DashBoardPage extends StatelessWidget {
   const DashBoardPage({super.key});
 
   @override
-  State<DashBoardPage> createState() => _DashBoardPageState();
+  Widget build(BuildContext context) {
+    final Object? customerId = ModalRoute.of(context)!.settings.arguments;
+
+    return MultiProvider(
+        providers: [
+          Provider<DashBoardPage>(
+            create: (_) => DashBoardPage(),
+          ),
+          Provider.value(value: ShopService()),
+          ProxyProvider<ShopService, ShopRepo>(
+            update: (context, shopService, previous) =>
+                ShopRepo(shopService: shopService),
+          ),
+        ],
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Dash Board",
+                style: GoogleFonts.inter(fontWeight: FontWeight.w500)),
+            actions: [
+              Container(
+                padding: EdgeInsets.only(
+                  right: 15,
+                  top: 5,
+                ),
+                child: Icon(
+                  Icons.message_rounded,
+                  size: 30,
+                ),
+              ),
+            ],
+          ),
+          body: DashBoardWidget(),
+        ));
+  }
 }
 
-class _DashBoardPageState extends State<DashBoardPage> {
+class DashBoardWidget extends StatefulWidget {
+  const DashBoardWidget({super.key});
+
+  @override
+  State<DashBoardWidget> createState() => _DashBoardWidgetState();
+}
+
+class _DashBoardWidgetState extends State<DashBoardWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Dash Board",
-            style: GoogleFonts.inter(fontWeight: FontWeight.w500)),
-        actions: [
-          Container(
-            padding: EdgeInsets.only(
-              right: 15,
-              top: 5,
-            ),
-            child: Icon(
-              Icons.message_rounded,
-              size: 30,
-            ),
-          ),
-        ],
-      ),
-      body: Column(
+    return Provider<DashBoardBloc>.value(
+      value: DashBoardBloc(orderRepo: Provider.of(context)),
+      child: Column(
         children: [
           Container(
             height: 80,

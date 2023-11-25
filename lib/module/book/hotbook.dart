@@ -1,13 +1,17 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, depend_on_referenced_packages, use_key_in_widget_constructors, must_be_immutable, sized_box_for_whitespace, library_private_types_in_public_api, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, depend_on_referenced_packages, use_key_in_widget_constructors, must_be_immutable, sized_box_for_whitespace, library_private_types_in_public_api, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables, unnecessary_cast, avoid_print
 
 import 'dart:ui';
 
+import 'package:bookstore_mobile/base/base_event.dart';
 import 'package:bookstore_mobile/event/add_to_cart_event.dart';
+import 'package:bookstore_mobile/event/fail_add_to_cart_event.dart';
+import 'package:bookstore_mobile/event/success_add_to_cart_event.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
+import 'package:bookstore_mobile/widget/bloc_listener.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -34,6 +38,7 @@ class _HotBookState extends State<HotBook> {
 
   @override
   Widget build(BuildContext context) {
+    final Object? customerId = ModalRoute.of(context)!.settings.arguments;
     return MultiProvider(
       providers: [
         Provider<HotBook>(
@@ -77,7 +82,9 @@ class _HotBookState extends State<HotBook> {
           ),
           backgroundColor: const Color.fromARGB(255, 0, 151, 178),
           actions: [
-            ShoppingCartWidget(),
+            ShoppingCartWidget(
+              customerId: customerId as String,
+            ),
           ],
         ),
         body: ScrollConfiguration(
@@ -87,15 +94,37 @@ class _HotBookState extends State<HotBook> {
               PointerDeviceKind.mouse,
             },
           ),
-          child: BookListWidget(),
+          child: BookListWidget(
+            customerId: customerId as String,
+          ),
         ),
       ),
     );
   }
 }
 
-class BookListWidget extends StatelessWidget {
+class BookListWidget extends StatefulWidget {
+  final String customerId;
+  BookListWidget({required this.customerId});
+
+  @override
+  State<BookListWidget> createState() => _BookListWidgetState();
+}
+
+class _BookListWidgetState extends State<BookListWidget> {
   List<BookData> bookData = [];
+  HomeBloc? bloc = HomeBloc.getInstance(
+      bookRepo: BookRepo(bookService: BookService()),
+      authorRepo: AuthorRepo(authorService: AuthorService()),
+      orderRepo: OrderRepo(orderService: OrderService()),
+      userRepo: UserRepo(userService: UserService()));
+
+  handleEvent(BaseEvent event) {
+    if (event is FailAddToCartEvent) {
+      showAlertDialog(context, bloc!);
+    }
+    event = SuccessAddToCardEvent();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +154,12 @@ class BookListWidget extends StatelessWidget {
                 );
               }
 
-              return ListView(
-                children: newBuildBooks(bookData, context, bloc),
+              return BlocListener<HomeBloc>(
+                listener: handleEvent,
+                child: ListView(
+                  children:
+                      newBuildBooks(bookData, context, bloc, widget.customerId),
+                ),
               );
             },
           ),
@@ -135,17 +168,17 @@ class BookListWidget extends StatelessWidget {
     );
   }
 
-  List<Widget> newBuildBooks(
-      List<BookData> data, BuildContext context, HomeBloc bloc) {
+  List<Widget> newBuildBooks(List<BookData> data, BuildContext context,
+      HomeBloc bloc, String customerId) {
     List<Widget> list = [];
     for (var i = 0; i < data.length; i++) {
-      list.add(newbuildBook(data[i], i, context, bloc));
+      list.add(newbuildBook(data[i], i, context, bloc, customerId));
     }
     return list;
   }
 
-  Widget newbuildBook(
-      BookData book, int index, BuildContext context, HomeBloc bloc) {
+  Widget newbuildBook(BookData book, int index, BuildContext context,
+      HomeBloc bloc, String customerId) {
     return Container(
       height: 180,
       child: Card(
@@ -160,7 +193,10 @@ class BookListWidget extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BookDetail(bookData: book)),
+                        builder: (context) => BookDetail(
+                              bookData: book,
+                              customerId: customerId,
+                            )),
                   );
                 },
                 child: ClipRRect(
@@ -245,7 +281,7 @@ class BookListWidget extends StatelessWidget {
                         margin: EdgeInsets.only(right: 15),
                         child: ElevatedButton(
                           onPressed: () {
-                            bloc.event.add(AddToCartEvent(book));
+                            bloc.event.add(AddToCartEvent(book, customerId));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 0, 151, 178),
@@ -275,9 +311,60 @@ class BookListWidget extends StatelessWidget {
       ),
     );
   }
+
+  showAlertDialog(BuildContext context, HomeBloc bloc) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text(
+        "OK",
+        style: GoogleFonts.inter(
+          fontWeight: FontWeight.w500,
+          fontSize: 19,
+        ),
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+        bloc.processEventSink.add(SuccessAddToCardEvent());
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(26.0))),
+      title: Text(
+        "Oops",
+        style: GoogleFonts.inter(
+          color: Colors.red,
+          fontWeight: FontWeight.w500,
+          fontSize: 22,
+        ),
+      ),
+      content: SizedBox(
+        width: 320,
+        child: Text(
+          "Sách này đã có trong giỏ hàng!",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+      ),
+      actions: [
+        cancelButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
 
 class ShoppingCartWidget extends StatelessWidget {
+  final String customerId;
+  ShoppingCartWidget({required this.customerId});
   @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
@@ -287,12 +374,14 @@ class ShoppingCartWidget extends StatelessWidget {
         authorRepo: Provider.of(context),
         userRepo: Provider.of(context),
       ),
-      child: CartWidget(),
+      child: CartWidget(customerId: customerId),
     );
   }
 }
 
 class CartWidget extends StatefulWidget {
+  final String customerId;
+  CartWidget({required this.customerId});
   @override
   _CartWidgetState createState() => _CartWidgetState();
 }
@@ -308,7 +397,7 @@ class _CartWidgetState extends State<CartWidget> {
     super.didChangeDependencies();
 
     var bloc = Provider.of<HomeBloc>(context);
-    bloc.getShoppingCartInfo();
+    bloc.getShoppingCartInfo(widget.customerId);
   }
 
   @override
@@ -332,7 +421,7 @@ class _CartWidgetState extends State<CartWidget> {
               return GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, "/checkout",
-                      arguments: "3af298e0-e126-4ce0-b957-b637869b2da3");
+                      arguments: widget.customerId);
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 15, right: 20),

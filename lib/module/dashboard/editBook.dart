@@ -163,7 +163,10 @@ class BookListWidget extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BookDetail(bookData: book)),
+                        builder: (context) => BookDetail(
+                              bookData: book,
+                              customerId: "",
+                            )),
                   );
                 },
                 child: ClipRRect(
@@ -248,7 +251,10 @@ class BookListWidget extends StatelessWidget {
                         margin: EdgeInsets.only(right: 15),
                         child: ElevatedButton(
                           onPressed: () {
-                            bloc.event.add(AddToCartEvent(book));
+                            bloc.event.add(
+                              AddToCartEvent(
+                                  book, "3af298e0-e126-4ce0-b957-b637869b2da3"),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 0, 151, 178),

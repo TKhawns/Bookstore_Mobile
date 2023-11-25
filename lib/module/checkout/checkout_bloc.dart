@@ -1,6 +1,8 @@
-// ignore_for_file: depend_on_referenced_packages, avoid_print
+// ignore_for_file: depend_on_referenced_packages, avoid_print, unused_local_variable
 
 import 'package:bookstore_mobile/event/delete_order_event.dart';
+import 'package:bookstore_mobile/module/checkout/payment_event.dart';
+import 'package:bookstore_mobile/module/confirm/confirm_event.dart';
 
 import '../../base/base_bloc.dart';
 import '../../base/base_event.dart';
@@ -28,15 +30,19 @@ class CheckoutBloc extends BaseBloc {
   void dispatchEvent(BaseEvent event) {
     switch (event.runtimeType) {
       case UpdateCartEvent:
-        handleUpdateCart(event);
         UpdateCartEvent e = event as UpdateCartEvent;
+        handleUpdateCart(e);
         getOrderDetail(e.customerId);
         break;
       case DeleteOrderEvent:
+        DeleteOrderEvent e = event as DeleteOrderEvent;
         handleDeleteOrder(event);
-        UpdateCartEvent e = event as UpdateCartEvent;
         getOrderDetail(e.customerId);
         break;
+      case ConfirmEvent:
+        handleConfirmCart(event);
+      case PaymentEvent:
+        handleSetPaymentStauts(event);
     }
   }
 
@@ -48,16 +54,34 @@ class CheckoutBloc extends BaseBloc {
 
   handleUpdateCart(event) {
     UpdateCartEvent e = event as UpdateCartEvent;
-    _orderRepo.updateOrder(e.bookData).then((isSuccess) {
+    _orderRepo.updateOrder(e.bookData, e.customerId).then((isSuccess) {
       if (isSuccess) {
         processEventSink.add(ShouldRebuildEvent());
       }
     });
   }
 
+  handleConfirmCart(event) {
+    ConfirmEvent e = event as ConfirmEvent;
+    _orderRepo.confirmOrder().then((isSuccess) {
+      if (isSuccess) {
+        print('Confirm success');
+      }
+    });
+  }
+
+  handleSetPaymentStauts(event) {
+    PaymentEvent e = event as PaymentEvent;
+    _orderRepo.setPaymentStatus(e.customerId).then((isSuccess) {
+      if (isSuccess) {
+        print('Set payment status success');
+      }
+    });
+  }
+
   handleDeleteOrder(event) {
     DeleteOrderEvent e = event as DeleteOrderEvent;
-    _orderRepo.deleteOrder(e.bookData).then((isSuccess) {
+    _orderRepo.deleteOrder(e.bookData, e.customerId).then((isSuccess) {
       if (isSuccess) {
         processEventSink.add(ShouldRebuildEvent());
       }

@@ -271,13 +271,20 @@ class BookListWidget extends StatelessWidget {
     return list;
   }
 
-  Widget newbuildBook(BookData bookData, int index, BuildContext context) {
+  Widget newbuildBook(
+    BookData bookData,
+    int index,
+    BuildContext context,
+  ) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BookDetail(bookData: bookData)),
+              builder: (context) => BookDetail(
+                    bookData: bookData,
+                    customerId: "",
+                  )),
         );
       },
       child: Container(

@@ -63,8 +63,13 @@ dev_dependencies:
   web_browser: ^0.7.4
   flutter_web_browser: ^0.17.1
   url_launcher: ^6.1.11
+  flare_flutter: ^3.0.2
   flutter_webview_plugin:
     git: https://github.com/snoopdoggy322/flutter_webview_plugin
+  flutter_chat_ui: ^1.6.10
+  flutter_chat_types: ^3.6.1
+  uuid: any
+  get: ^4.6.5
   
 
 # For information on the generic Dart part of this file, see the
@@ -122,6 +127,9 @@ flutter:
     - assets/images/bookadvertise4.jpg
 
     - assets/videos/WilliamShakespeare.mp4
+    - assets/videos/SuccessCheck.flr
+
+    - assets/message.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

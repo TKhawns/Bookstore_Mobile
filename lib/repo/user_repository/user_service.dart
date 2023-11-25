@@ -18,4 +18,10 @@ class UserService {
       'password': pass,
     });
   }
+
+  Future<Response> getUserInfo(String customerId) async {
+    return await BookClient.instance.dio.post("/user/info", data: {
+      'customerId': customerId,
+    });
+  }
 }

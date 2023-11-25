@@ -41,8 +41,8 @@ class _HomePageState extends State<NewHomePage> {
 
   List<Filter> filters = getFilterList();
   Filter selectedFilter = Filter("");
-  List<ShopNavigationItem> navigationItems = getShopNavigationItemList();
-  ShopNavigationItem selectedItem = ShopNavigationItem(Icons.book, "", "");
+  List<ShopNavigationItem> navigationItems = getShopNavigationItemList("");
+  ShopNavigationItem selectedItem = ShopNavigationItem(Icons.book, "", "", "");
   List<BookData> bookData = [];
 
   SearchBookBloc searchBloc =
@@ -178,7 +178,9 @@ class _HomePageState extends State<NewHomePage> {
                     PointerDeviceKind.mouse,
                   },
                 ),
-                child: BookListWidget(),
+                child: BookListWidget(
+                  customerId: customerId,
+                ),
               ),
             ),
             Container(
@@ -271,7 +273,7 @@ class _HomePageState extends State<NewHomePage> {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: buildNavigationItems(),
+            children: buildNavigationItems(customerId),
           ),
         ),
       ),
@@ -328,25 +330,27 @@ class _HomePageState extends State<NewHomePage> {
     );
   }
 
-  List<Widget> buildNavigationItems() {
+  List<Widget> buildNavigationItems(String customerId) {
     List<Widget> list = [];
     for (var i = 0; i < navigationItems.length; i++) {
-      list.add(buildNavigationItem(navigationItems[i]));
+      list.add(buildNavigationItem(navigationItems[i], customerId));
     }
     return list;
   }
 
-  Widget buildNavigationItem(ShopNavigationItem item) {
+  Widget buildNavigationItem(ShopNavigationItem item, String customerId) {
     return GestureDetector(
       onTap: () {
         setState(() {
           selectedItem = item;
         });
         if (selectedItem.title != "Trang chủ") {
-          Navigator.pushNamed(context, selectedItem.path);
+          Navigator.pushNamed(context, selectedItem.path,
+              arguments: customerId);
           selectedItem = navigationItems[0];
         } else {
-          Navigator.pushReplacementNamed(context, selectedItem.path);
+          Navigator.pushReplacementNamed(context, selectedItem.path,
+              arguments: customerId);
           return;
         }
       },
@@ -398,6 +402,8 @@ class _HomePageState extends State<NewHomePage> {
 }
 
 class BookListWidget extends StatelessWidget {
+  final String customerId;
+  BookListWidget({required this.customerId});
   List<BookData> bookData = [];
   @override
   Widget build(BuildContext context) {
@@ -430,7 +436,7 @@ class BookListWidget extends StatelessWidget {
               return ListView(
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                children: newBuildBooks(bookData, context),
+                children: newBuildBooks(bookData, context, customerId),
               );
             },
           ),
@@ -439,21 +445,26 @@ class BookListWidget extends StatelessWidget {
     );
   }
 
-  List<Widget> newBuildBooks(List<BookData> data, BuildContext context) {
+  List<Widget> newBuildBooks(
+      List<BookData> data, BuildContext context, String customerId) {
     List<Widget> list = [];
     for (var i = 0; i < data.length; i++) {
-      list.add(newbuildBook(data[i], i, context));
+      list.add(newbuildBook(data[i], i, context, customerId));
     }
     return list;
   }
 
-  Widget newbuildBook(BookData bookData, int index, BuildContext context) {
+  Widget newbuildBook(
+      BookData bookData, int index, BuildContext context, String customerId) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BookDetail(bookData: bookData)),
+              builder: (context) => BookDetail(
+                    bookData: bookData,
+                    customerId: customerId,
+                  )),
         );
       },
       child: Container(
@@ -675,7 +686,7 @@ class _CartWidgetState extends State<CartWidget> {
     super.didChangeDependencies();
 
     var bloc = Provider.of<HomeBloc>(context);
-    bloc.getShoppingCartInfo();
+    bloc.getShoppingCartInfo(widget.customerID);
   }
 
   @override

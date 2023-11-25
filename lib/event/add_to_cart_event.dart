@@ -3,6 +3,7 @@ import '../base/base_event.dart';
 
 class AddToCartEvent extends BaseEvent {
   BookData bookData;
+  String customerId;
 
-  AddToCartEvent(this.bookData);
+  AddToCartEvent(this.bookData, this.customerId);
 }
