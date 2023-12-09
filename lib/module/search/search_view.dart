@@ -37,17 +37,17 @@ class _SearchViewState extends State<SearchView> {
 
   Color myColor = Colors.black;
   Color myColorAdd = Colors.white;
-  void _updateColor(PointerEvent details) {
-    setState(() {
-      myColor = Colors.blue;
-    });
-  }
+  // void _updateColor(PointerEvent details) {
+  //   setState(() {
+  //     myColor = Colors.blue;
+  //   });
+  // }
 
-  void _onExit(PointerEvent details) {
-    setState(() {
-      myColor = Colors.black;
-    });
-  }
+  // void _onExit(PointerEvent details) {
+  //   setState(() {
+  //     myColor = Colors.black;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +115,12 @@ class _SearchViewState extends State<SearchView> {
                       filled: true,
                       fillColor: Colors.white,
                       prefixIcon: MouseRegion(
-                        onHover: _updateColor,
-                        onExit: _onExit,
+                        //onHover: _updateColor,
+                        //onExit: _onExit,
                         child: GestureDetector(
-                            onTap: () =>
-                                searchBloc.event.add(SearchEvent(title: query)),
+                            onTap: () {
+                              searchBloc.event.add(SearchEvent(title: query));
+                            },
                             child:
                                 Icon(Icons.search, size: 26, color: myColor)),
                       ),

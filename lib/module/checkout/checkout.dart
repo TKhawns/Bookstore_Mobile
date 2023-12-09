@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:bookstore_mobile/event/delete_order_event.dart';
 import 'package:bookstore_mobile/event/should_rebuild_event.dart';
-import 'package:bookstore_mobile/module/checkout/payment.dart';
+import 'package:bookstore_mobile/module/payment/payment.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_service.dart';
 import 'package:bookstore_mobile/widget/bloc_listener.dart';
@@ -190,8 +190,11 @@ class _ShoppingCartInfoWidgetState extends State<ShoppingCartInfoWidget> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     PaymentWidget(
-                                                        customerId:
-                                                            widget.customerId)),
+                                                      customerId:
+                                                          widget.customerId,
+                                                      total:
+                                                          totalPrice.toString(),
+                                                    )),
                                           );
                                         },
                                         child: Text(
@@ -318,7 +321,6 @@ Widget newbuildBook(BookData book, int index, BuildContext context,
                                 onPressed: () {
                                   book.quantity =
                                       (int.parse(book.quantity) + 1).toString();
-                                  print("TEST QUANTITY : ${book.quantity}");
                                   bloc.event
                                       .add(UpdateCartEvent(book, customerId));
                                 },

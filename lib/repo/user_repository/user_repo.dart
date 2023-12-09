@@ -54,4 +54,16 @@ class UserRepo {
     }
     return c.future;
   }
+
+  Future<List<UserData>> getUserChat(String customerId) async {
+    var c = Completer<List<UserData>>();
+    try {
+      var response = await _userService.getUserChat(customerId);
+      var userData = UserData.parseUserDataList(response.data);
+      c.complete(userData);
+    } on DioException catch (e) {
+      c.completeError("Get information fail");
+    }
+    return c.future;
+  }
 }

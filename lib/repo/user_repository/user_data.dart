@@ -26,6 +26,12 @@ class UserData {
         address: map['address'],
         phone: map['email']);
   }
+
+  static List<UserData> parseUserDataList(map) {
+    var list = map["data"] as List;
+    return list.map((book) => UserData.fromJsonInfo(book)).toList();
+  }
+
   factory UserData.fromJsonInfo(Map<String, dynamic> map) {
     return UserData(
         displayName: map['full_name'],

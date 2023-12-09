@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, sized_box_for_whitespace, sort_child_properties_last, prefer_interpolation_to_compose_strings, library_private_types_in_public_api
 import 'dart:ui';
 
-import 'package:bookstore_mobile/module/page/chatshop.dart';
+import 'package:bookstore_mobile/module/chatting/chat_widget.dart';
 import 'package:bookstore_mobile/module/shop/shop_info.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:flutter/material.dart';

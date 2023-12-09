@@ -42,7 +42,7 @@ class SearchBookBloc extends BaseBloc {
     switch (event.runtimeType) {
       case SearchEvent:
         handleSearchEvent(event);
-        getBookResult(event);
+        //getBookResult(event);
         break;
     }
   }
@@ -56,7 +56,6 @@ class SearchBookBloc extends BaseBloc {
 
   Stream<List<BookData>> getBookResult(event) {
     SearchEvent e = event as SearchEvent;
-    print("TESTTTTTT TITLE ${e.title}");
     return Stream<List<BookData>>.fromFuture(
       _bookRepo.searchBookList(e.title),
     );

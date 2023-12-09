@@ -1,8 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_print, unused_local_variable
 
 import 'package:bookstore_mobile/event/delete_order_event.dart';
-import 'package:bookstore_mobile/module/checkout/payment_event.dart';
 import 'package:bookstore_mobile/module/confirm/confirm_event.dart';
+import 'package:bookstore_mobile/module/payment/payment_event.dart';
 
 import '../../base/base_bloc.dart';
 import '../../base/base_event.dart';

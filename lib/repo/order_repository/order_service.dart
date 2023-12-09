@@ -12,6 +12,12 @@ class OrderService {
     });
   }
 
+  Future<Response> getDataDashboard(String customerId) {
+    return BookClient.instance.dio.post('/order/dash', data: {
+      'customer_id': customerId,
+    });
+  }
+
   Future<Response> addToCart(BookData bookData, String customerId) {
     return BookClient.instance.dio.post(
       '/order/add',
@@ -60,6 +66,12 @@ class OrderService {
         'customerId': customerId,
       },
     );
+  }
+
+  Future<Response> orderList(String shopName) {
+    return BookClient.instance.dio.post('/order/detail', data: {
+      'shopName': shopName,
+    });
   }
 
   Future<Response> updateOrder(BookData bookData, String customerId) {

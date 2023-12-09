@@ -32,8 +32,8 @@ class _ChatShopPageState extends State<ChatShopPage> {
       shopName: widget.shopName);
   MessageService _messageService = MessageService();
   final List<types.Message> _messages = [];
-  final _user = const types.User(
-      id: "3af298e0-e126-4ce0-b957-b637869b2da3", firstName: 'Khánh');
+  //String user_id = "3af298e0-e126-4ce0-b957-b637869b2da3";
+  late types.User _user = types.User(id: widget.customerId);
 
   final String roomId = "test_room_id";
   Future<void> initMessages() async {

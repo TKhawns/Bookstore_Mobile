@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors, depend_on_referenced_packages
 
-import 'package:bookstore_mobile/module/page/profile_bloc.dart';
-import 'package:bookstore_mobile/module/page/voucher.dart';
+import 'package:bookstore_mobile/module/profile/profile_bloc.dart';
+import 'package:bookstore_mobile/module/profile/voucher.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
 import 'package:bookstore_mobile/repo/user_repository/user_data.dart';
 import 'package:bookstore_mobile/repo/user_repository/user_repo.dart';

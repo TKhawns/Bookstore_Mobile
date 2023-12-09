@@ -3,6 +3,8 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import '../../module/dashboard/darh_board_data.dart';
+import '../../module/order/order_data.dart';
 import '../../widget/shopping_cart.dart';
 import '../book_repository/book_data.dart';
 import 'order_service.dart';
@@ -21,6 +23,20 @@ class OrderRepo {
       c.complete(shoppingCart);
     } on DioException {
       c.completeError('Lỗi AddToCart');
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
+
+  Future<DashBoardData> getDataDashboard(String customerId) async {
+    var c = Completer<DashBoardData>();
+    try {
+      var response = await _orderService.getDataDashboard(customerId);
+      var data = DashBoardData.fromJson(response.data);
+      c.complete(data);
+    } on DioException {
+      c.completeError('Lỗi get data dash board');
     } catch (e) {
       c.completeError(e);
     }
@@ -60,6 +76,21 @@ class OrderRepo {
     try {
       var response = await _orderService.orderDetail(customerId);
       var bookList = BookData.parseBookDataList(response.data);
+      c.complete(bookList);
+    } on DioException {
+      c.completeError("Get book fail");
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
+
+  Future<List<OrderData>> getOrderList(String shopName) async {
+    var c = Completer<List<OrderData>>();
+
+    try {
+      var response = await _orderService.orderList(shopName);
+      var bookList = OrderData.parseBookDataList(response.data);
       c.complete(bookList);
     } on DioException {
       c.completeError("Get book fail");

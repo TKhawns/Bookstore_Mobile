@@ -6,6 +6,7 @@ import 'package:bookstore_mobile/base/base_bloc.dart';
 import 'package:bookstore_mobile/base/base_event.dart';
 import 'package:bookstore_mobile/event/add_to_cart_event.dart';
 import 'package:bookstore_mobile/module/dashboard/addbook_success_event.dart';
+import 'package:bookstore_mobile/module/dashboard/darh_board_data.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -52,6 +53,12 @@ class DashBoardBloc extends BaseBloc {
     _orderRepo.addToBooks(addToCartEvent.bookData).then((isSuccess) {
       processEventSink.add(AddToBookSuccess());
     });
+  }
+
+  Stream<DashBoardData> getDataDashBoard(String customerId) {
+    return Stream<DashBoardData>.fromFuture(
+      _orderRepo.getDataDashboard(customerId),
+    );
   }
 
   @override

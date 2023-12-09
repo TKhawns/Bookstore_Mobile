@@ -13,17 +13,17 @@ class ShopData {
     required this.number_books,
   });
 
-  static List<ShopData> parseShopInfoList(map) {
-    var list = map["data"] as List;
-    return list.map((book) => ShopData.fromJson(book)).toList();
-  }
+  // static ShopData parseShopInfoList(map) {
+  //   var list = map["data"];
+  //   return list.map((book) => ShopData.fromJson(book)).toList();
+  // }
 
-  factory ShopData.fromJson(Map<String, dynamic> map) {
+  factory ShopData.fromJson(map) {
     return ShopData(
-      name: map["name"].toString(),
-      address: map["address"],
-      image: map["image"],
-      number_books: map["number_books"],
+      name: map["data"]["name"].toString(),
+      address: map["data"]["address"],
+      image: map["data"]["image"],
+      number_books: map["data"]["number_books"],
     );
   }
 

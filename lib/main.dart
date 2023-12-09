@@ -1,12 +1,11 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, unnecessary_import
 
 import 'package:bookstore_mobile/module/checkout/checkout.dart';
-import 'package:bookstore_mobile/module/checkout/payment.dart';
 import 'package:bookstore_mobile/module/confirm/confirm_page.dart';
 import 'package:bookstore_mobile/module/home/user_home_page.dart';
 import 'package:bookstore_mobile/module/author/famous_author.dart';
 import 'package:bookstore_mobile/module/book/hotbook.dart';
-import 'package:bookstore_mobile/module/page/profile.dart';
+import 'package:bookstore_mobile/module/profile/profile_page.dart';
 import 'package:bookstore_mobile/module/search/search_view.dart';
 import 'package:bookstore_mobile/module/shop/myshop.dart';
 import 'package:bookstore_mobile/module/shop/register_shop.dart';

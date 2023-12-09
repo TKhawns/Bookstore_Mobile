@@ -24,4 +24,10 @@ class UserService {
       'customerId': customerId,
     });
   }
+
+  Future<Response> getUserChat(String customerId) async {
+    return await BookClient.instance.dio.post("/user/chat", data: {
+      'customerId': customerId,
+    });
+  }
 }

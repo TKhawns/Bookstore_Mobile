@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:bookstore_mobile/module/shop/shop_bloc.dart';
+import 'package:bookstore_mobile/repo/shop_repository/shop_data.dart';
 import 'package:bookstore_mobile/repo/shop_repository/shop_repo.dart';
 import 'package:bookstore_mobile/repo/shop_repository/shop_service.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,9 @@ class ShopInfoWidget extends StatefulWidget {
 class _ShopInfoWidgetState extends State<ShopInfoWidget> {
   @override
   Widget build(BuildContext context) {
+    ShopData shopData =
+        ShopData(name: "", image: "", address: "", number_books: "");
+
     return MultiProvider(
       providers: [
         Provider<ShopInfoWidget>(
@@ -37,177 +41,197 @@ class _ShopInfoWidgetState extends State<ShopInfoWidget> {
               ShopRepo(shopService: shopService),
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              Container(
-                height: 45,
-                child: CircleAvatar(
-                  radius: 35, // Image radius
-                  backgroundImage: AssetImage("assets/images/tugiac.jpg"),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+      child: Provider<ShopBloc?>.value(
+        value: ShopBloc(shopRepo: ShopRepo(shopService: ShopService())),
+        child: Consumer<ShopBloc>(
+          builder: (context, bloc, child) {
+            bloc.getShopInfo(widget.shopName).listen((shop) {
+              shopData = shop;
+              print(shopData.image);
+            });
+            return StreamProvider<ShopData>.value(
+              value: bloc.getShopInfo(widget.shopName),
+              initialData: shopData,
+              child: Consumer<ShopData>(
+                builder: (context, data, child) => Scaffold(
+                  appBar: AppBar(
+                    title: Row(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Text(
-                            widget.shopName,
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                          height: 45,
+                          child: CircleAvatar(
+                            radius: 35, // Image radius
+                            backgroundImage: NetworkImage(data.image),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      widget.shopName,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 3),
+                                    child: Icon(
+                                      Icons.verified_rounded,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 5, left: 5, bottom: 10),
+                                child: Text(
+                                  data.address,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(left: 3),
-                          child: Icon(
-                            Icons.verified_rounded,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                          padding: EdgeInsets.only(left: 10),
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red),
+                              onPressed: () {},
+                              child: Text("+ Follow")),
                         ),
                       ],
                     ),
-                    Container(
-                      padding: EdgeInsets.only(top: 5, left: 5, bottom: 10),
-                      child: Text(
-                        "Ha Noi, Viet Nam",
-                        style: TextStyle(color: Colors.grey[400], fontSize: 16),
+                  ),
+                  body: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      },
+                    ),
+                    child: SingleChildScrollView(
+                      child: Container(
+                        color: Colors.grey[300],
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/bookadvertise1.jpg"),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                    top: 10,
+                                    left: 10,
+                                    right: 10,
+                                  ),
+                                  height: 140,
+                                  width: 240,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/bookadvertise3.jpg"),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    margin: EdgeInsets.only(top: 10, right: 10),
+                                    height: 140,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/bookadvertise4.jpg"),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    margin: EdgeInsets.only(top: 10, left: 10),
+                                    height: 140,
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/bookadvertise2.jpg"),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                    top: 10,
+                                    left: 10,
+                                    right: 10,
+                                  ),
+                                  height: 140,
+                                  width: 240,
+                                ),
+                              ],
+                            ),
+                            Container(
+                              height: 10,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              alignment: Alignment.centerLeft,
+                              height: 60,
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                "Bán Chạy Nhất",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 21),
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                            ),
+                            BookListWidget(shopName: widget.shopName),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                child: ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                    onPressed: () {},
-                    child: Text("+ Follow")),
-              ),
-            ],
-          ),
-        ),
-        body: ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(
-            dragDevices: {
-              PointerDeviceKind.touch,
-              PointerDeviceKind.mouse,
-            },
-          ),
-          child: SingleChildScrollView(
-            child: Container(
-              color: Colors.grey[300],
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          image: DecorationImage(
-                            image:
-                                AssetImage("assets/images/bookadvertise1.jpg"),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        margin: EdgeInsets.only(
-                          top: 10,
-                          left: 10,
-                          right: 10,
-                        ),
-                        height: 140,
-                        width: 240,
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/bookadvertise3.jpg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          margin: EdgeInsets.only(top: 10, right: 10),
-                          height: 140,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/bookadvertise4.jpg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          margin: EdgeInsets.only(top: 10, left: 10),
-                          height: 140,
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          image: DecorationImage(
-                            image:
-                                AssetImage("assets/images/bookadvertise2.jpg"),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        margin: EdgeInsets.only(
-                          top: 10,
-                          left: 10,
-                          right: 10,
-                        ),
-                        height: 140,
-                        width: 240,
-                      ),
-                    ],
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    alignment: Alignment.centerLeft,
-                    height: 60,
-                    padding: EdgeInsets.only(left: 20),
-                    child: Text(
-                      "Bán Chạy Nhất",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 21),
-                    ),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  BookListWidget(shopName: widget.shopName),
-                ],
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
@@ -332,7 +356,7 @@ class BookListWidget extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(left: 5),
                   child: Text(
-                    "|  Da ban: 5k+",
+                    "|  Đã bán: 5k+",
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       color: Colors.grey,
