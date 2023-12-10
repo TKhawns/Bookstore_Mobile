@@ -1,60 +1,33 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, must_be_immutable, sized_box_for_whitespace, avoid_print, depend_on_referenced_packages
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, must_be_immutable, sized_box_for_whitespace, avoid_print, depend_on_referenced_packages, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
 
 import 'dart:ui';
-
-import 'package:bookstore_mobile/base/base_event.dart';
-import 'package:bookstore_mobile/event/should_rebuild_event.dart';
 import 'package:bookstore_mobile/module/search/search_book_bloc.dart';
-import 'package:bookstore_mobile/module/search/search_event.dart';
-import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
-import 'package:bookstore_mobile/repo/author_repository/author_service.dart';
 import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
-import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
-import 'package:bookstore_mobile/repo/user_repository/user_repo.dart';
-import 'package:bookstore_mobile/repo/user_repository/user_service.dart';
-import 'package:bookstore_mobile/widget/bloc_listener.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../repo/book_repository/book_repo.dart';
 import '../../repo/book_repository/book_service.dart';
-import '../../repo/order_repository/order_service.dart';
 import '../home/book_detail.dart';
-import '../home/home_bloc.dart';
-
-String query = "";
 
 class SearchView extends StatefulWidget {
-  const SearchView({super.key});
-
   @override
   State<SearchView> createState() => _SearchViewState();
 }
 
 class _SearchViewState extends State<SearchView> {
-  final TextEditingController _txtSearchTextController =
-      TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
-  List<BookData> bookData = [];
   SearchBookBloc searchBloc =
       SearchBookBloc(bookRepo: BookRepo(bookService: BookService()));
-  HomeBloc? homeBloc = HomeBloc.getInstance(
-      bookRepo: BookRepo(bookService: BookService()),
-      authorRepo: AuthorRepo(authorService: AuthorService()),
-      orderRepo: OrderRepo(orderService: OrderService()),
-      userRepo: UserRepo(userService: UserService()));
-  Color myColor = Colors.black;
-  Color myColorAdd = Colors.white;
-  // void _updateColor(PointerEvent details) {
-  //   setState(() {
-  //     myColor = Colors.blue;
-  //   });
-  // }
 
-  // void _onExit(PointerEvent details) {
-  //   setState(() {
-  //     myColor = Colors.black;
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    searchController.addListener(() {
+      var query = searchController.text;
+      searchBloc.search(query);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,32 +37,11 @@ class _SearchViewState extends State<SearchView> {
           create: (_) => SearchView(),
         ),
         Provider.value(
-          value: UserService(),
-        ),
-        ProxyProvider<UserService, UserRepo>(
-          update: (context, userService, previous) =>
-              UserRepo(userService: userService),
-        ),
-        Provider.value(
           value: BookService(),
         ),
         ProxyProvider<BookService, BookRepo>(
           update: (context, bookService, previous) =>
               BookRepo(bookService: bookService),
-        ),
-        Provider.value(
-          value: AuthorService(),
-        ),
-        ProxyProvider<AuthorService, AuthorRepo>(
-          update: (context, authorService, previous) =>
-              AuthorRepo(authorService: authorService),
-        ),
-        Provider.value(
-          value: OrderService(),
-        ),
-        ProxyProvider<OrderService, OrderRepo>(
-          update: (context, orderService, previous) =>
-              OrderRepo(orderService: orderService),
         ),
       ],
       child: Scaffold(
@@ -98,44 +50,24 @@ class _SearchViewState extends State<SearchView> {
           title: Container(
             margin: EdgeInsets.only(left: 10),
             height: 40,
-            child: StreamProvider<String?>.value(
-                initialData: "",
-                value: searchBloc.searchStream,
-                child: Consumer<String?>(
-                  builder: (context, value, child) => TextField(
-                    controller: _txtSearchTextController,
-                    onChanged: (value) {
-                      searchBloc.searchSink.add(value);
-                      query = value;
-                      print(query);
-                      searchBloc.event.add(SearchEvent(title: query));
-                    },
-                    autofocus: true,
-                    cursorColor: Colors.black,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(bottom: 10),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 10, color: Color.fromARGB(255, 0, 151, 178)),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      prefixIcon: MouseRegion(
-                        //onHover: _updateColor,
-                        //onExit: _onExit,
-                        child: GestureDetector(
-                            onTap: () {
-                              // searchBloc.event.add(SearchEvent(title: query));
-                            },
-                            child:
-                                Icon(Icons.search, size: 26, color: myColor)),
-                      ),
-                      hintText: "Search Books",
-                    ),
-                  ),
-                )),
+            child: TextFormField(
+              controller: searchController,
+              autofocus: true,
+              cursorColor: Colors.black,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(bottom: 10),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      width: 10, color: Color.fromARGB(255, 0, 151, 178)),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                hintText: "Search Books",
+                prefixIcon: Icon(Icons.search, size: 26),
+              ),
+            ),
           ),
         ),
         body: ScrollConfiguration(
@@ -145,72 +77,25 @@ class _SearchViewState extends State<SearchView> {
               PointerDeviceKind.mouse,
             },
           ),
-          child: BookListWidget(),
-        ),
-      ),
-    );
-  }
-}
-
-class BookListWidget extends StatefulWidget {
-  @override
-  State<BookListWidget> createState() => _BookListWidgetState();
-}
-
-class _BookListWidgetState extends State<BookListWidget> {
-  List<BookData> bookData = [];
-
-  handleEvent(BaseEvent event) {
-    //totalPrice = 0;
-    if (event is ShouldRebuildEvent) {
-      setState(() {});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Provider<HomeBloc?>.value(
-      value: HomeBloc.getInstance(
-        bookRepo: Provider.of(context),
-        orderRepo: Provider.of(context),
-        authorRepo: Provider.of(context),
-        userRepo: Provider.of(context),
-      ),
-      child: Consumer<HomeBloc>(builder: (context, bloc, child) {
-        bloc.getBookList().listen((event) {
-          for (var book in event) {
-            if (book.title.contains(query)) bookData.add(book);
-          }
-        });
-        return BlocListener<HomeBloc>(
-          listener: handleEvent,
-          child: StreamProvider<List<BookData>?>.value(
-            initialData: bookData,
-            value: bloc.getSearchResult(query),
-            child: Consumer<List<BookData>?>(
-              builder: (context, data, child) {
-                if (data!.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.yellow,
-                    ),
-                  );
-                }
-
+          child: Container(
+            child: StreamBuilder<List<BookData>>(
+              initialData: [],
+              stream: searchBloc.searchController.stream,
+              builder: (context, snapshot) {
                 return ListView(
-                  children: newBuildBooks(bookData, context),
+                  children: newBuildBooks(snapshot.data, context),
                 );
               },
             ),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 
-  List<Widget> newBuildBooks(List<BookData> data, BuildContext context) {
+  List<Widget> newBuildBooks(List<BookData>? data, BuildContext context) {
     List<Widget> list = [];
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data!.length; i++) {
       list.add(newbuildBook(data[i], i, context));
     }
     return list;
@@ -314,3 +199,57 @@ class _BookListWidgetState extends State<BookListWidget> {
     );
   }
 }
+
+// class BookListWidget extends StatefulWidget {
+//   @override
+//   State<BookListWidget> createState() => _BookListWidgetState();
+// }
+
+// class _BookListWidgetState extends State<BookListWidget> {
+//   List<BookData> bookData = [];
+
+//   handleEvent(BaseEvent event) {
+//     //totalPrice = 0;
+//     if (event is ShouldRebuildEvent) {
+//       setState(() {});
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Provider<SearchBookBloc?>.value(
+//       value: SearchBookBloc(bookRepo: Provider.of(context)),
+//       child: Consumer<SearchBookBloc>(builder: (context, bloc, child) {
+//         bloc.getBookResult(query).listen((event) {
+//           for (var book in event) {
+//             bookData.add(book);
+//           }
+//         });
+//         return BlocListener<SearchBookBloc>(
+//           listener: handleEvent,
+//           child: StreamProvider<List<BookData>?>.value(
+//             initialData: bookData,
+//             value: bloc.getBookResult(query),
+//             child: Consumer<List<BookData>?>(
+//               builder: (context, data, child) {
+//                 if (data!.isEmpty) {
+//                   return const Center(
+//                     child: CircularProgressIndicator(
+//                       backgroundColor: Colors.yellow,
+//                     ),
+//                   );
+//                 }
+
+//                 return ListView(
+//                   children: newBuildBooks(bookData, context),
+//                 );
+//               },
+//             ),
+//           ),
+//         );
+//       }),
+//     );
+//   }
+
+
+//}
