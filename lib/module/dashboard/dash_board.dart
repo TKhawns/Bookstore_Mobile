@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'addbook.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:badges/badges.dart' as badges;
 
 class DashBoardPage extends StatelessWidget {
   const DashBoardPage({super.key});
@@ -47,21 +48,30 @@ class DashBoardPage extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(
                   right: 15,
-                  top: 5,
+                  top: 15,
                 ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShopChatWidget(
-                                customerId: customerId as String,
-                              )),
-                    );
-                  },
-                  child: Icon(
-                    Icons.message_rounded,
-                    size: 30,
+                child: badges.Badge(
+                  badgeContent: Text(
+                    ".",
+                    style: GoogleFonts.inter(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 8),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShopChatWidget(
+                                  customerId: customerId as String,
+                                )),
+                      );
+                    },
+                    child: Icon(
+                      Icons.message_rounded,
+                      size: 30,
+                    ),
                   ),
                 ),
               ),

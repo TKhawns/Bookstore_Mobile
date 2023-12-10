@@ -60,7 +60,6 @@ class _AddBookPageState extends State<AddBookPageWidget> {
   final TextEditingController _txtQuantityController = TextEditingController();
   final TextEditingController _txtAuthorController = TextEditingController();
   final TextEditingController _txtImageController = TextEditingController();
-
   handleEvent(BaseEvent event) {
     if (event is AddToBookSuccess) {
       print("success");
@@ -151,7 +150,7 @@ class _AddBookPageState extends State<AddBookPageWidget> {
                     onPressed: () {
                       bloc.event.add(AddToCartEvent(
                         BookData(
-                            book_id: 26,
+                            book_id: DateTime.now().millisecond + 25,
                             title: _txtTitleController.text,
                             description: _txtDescriptionController.text,
                             cost: _txtPriceController.text,
@@ -166,6 +165,7 @@ class _AddBookPageState extends State<AddBookPageWidget> {
                             quantity: "1"),
                         "3af298e0-e126-4ce0-b957-b637869b2da3",
                       ));
+                      showAlertDialog(context);
                     },
                   ),
                 ),
@@ -173,6 +173,55 @@ class _AddBookPageState extends State<AddBookPageWidget> {
             ),
           );
         }));
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text(
+        "OK",
+        style: GoogleFonts.inter(
+          fontWeight: FontWeight.w500,
+          fontSize: 19,
+        ),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(26.0))),
+      title: Text(
+        "Status",
+        style: GoogleFonts.inter(
+          color: Colors.red,
+          fontWeight: FontWeight.w500,
+          fontSize: 22,
+        ),
+      ),
+      content: SizedBox(
+        width: 320,
+        child: Text(
+          "Thêm sách thành công",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+      ),
+      actions: [
+        cancelButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Widget _buildNameBook(DashBoardBloc bloc) {

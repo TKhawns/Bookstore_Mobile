@@ -100,6 +100,21 @@ class OrderRepo {
     return c.future;
   }
 
+  Future<List<OrderData>> getUserOrderList(String shopName) async {
+    var c = Completer<List<OrderData>>();
+
+    try {
+      var response = await _orderService.getUserOrderList(shopName);
+      var bookList = OrderData.parseBookDataList(response.data);
+      c.complete(bookList);
+    } on DioException {
+      c.completeError("Get user orders fail");
+    } catch (e) {
+      c.completeError(e);
+    }
+    return c.future;
+  }
+
   Future<bool> updateOrder(BookData bookData, String customerId) async {
     var c = Completer<bool>();
     try {

@@ -43,7 +43,7 @@ class OrderService {
     return BookClient.instance.dio.post(
       '/home/add_book',
       data: {
-        "book_id": 26,
+        "book_id": bookData.book_id,
         "title": bookData.title,
         "description": bookData.description,
         "price": bookData.cost,
@@ -70,6 +70,12 @@ class OrderService {
 
   Future<Response> orderList(String shopName) {
     return BookClient.instance.dio.post('/order/detail', data: {
+      'shopName': shopName,
+    });
+  }
+
+  Future<Response> getUserOrderList(String shopName) {
+    return BookClient.instance.dio.post('/order/userdetail', data: {
       'shopName': shopName,
     });
   }

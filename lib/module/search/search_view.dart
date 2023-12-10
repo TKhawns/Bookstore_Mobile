@@ -2,6 +2,8 @@
 
 import 'dart:ui';
 
+import 'package:bookstore_mobile/base/base_event.dart';
+import 'package:bookstore_mobile/event/should_rebuild_event.dart';
 import 'package:bookstore_mobile/module/search/search_book_bloc.dart';
 import 'package:bookstore_mobile/module/search/search_event.dart';
 import 'package:bookstore_mobile/repo/author_repository/author_repo.dart';
@@ -10,6 +12,7 @@ import 'package:bookstore_mobile/repo/book_repository/book_data.dart';
 import 'package:bookstore_mobile/repo/order_repository/order_repo.dart';
 import 'package:bookstore_mobile/repo/user_repository/user_repo.dart';
 import 'package:bookstore_mobile/repo/user_repository/user_service.dart';
+import 'package:bookstore_mobile/widget/bloc_listener.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../repo/book_repository/book_repo.dart';
@@ -34,7 +37,11 @@ class _SearchViewState extends State<SearchView> {
   List<BookData> bookData = [];
   SearchBookBloc searchBloc =
       SearchBookBloc(bookRepo: BookRepo(bookService: BookService()));
-
+  HomeBloc? homeBloc = HomeBloc.getInstance(
+      bookRepo: BookRepo(bookService: BookService()),
+      authorRepo: AuthorRepo(authorService: AuthorService()),
+      orderRepo: OrderRepo(orderService: OrderService()),
+      userRepo: UserRepo(userService: UserService()));
   Color myColor = Colors.black;
   Color myColorAdd = Colors.white;
   // void _updateColor(PointerEvent details) {
@@ -101,6 +108,7 @@ class _SearchViewState extends State<SearchView> {
                       searchBloc.searchSink.add(value);
                       query = value;
                       print(query);
+                      searchBloc.event.add(SearchEvent(title: query));
                     },
                     autofocus: true,
                     cursorColor: Colors.black,
@@ -119,7 +127,7 @@ class _SearchViewState extends State<SearchView> {
                         //onExit: _onExit,
                         child: GestureDetector(
                             onTap: () {
-                              searchBloc.event.add(SearchEvent(title: query));
+                              // searchBloc.event.add(SearchEvent(title: query));
                             },
                             child:
                                 Icon(Icons.search, size: 26, color: myColor)),
@@ -152,6 +160,13 @@ class BookListWidget extends StatefulWidget {
 class _BookListWidgetState extends State<BookListWidget> {
   List<BookData> bookData = [];
 
+  handleEvent(BaseEvent event) {
+    //totalPrice = 0;
+    if (event is ShouldRebuildEvent) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Provider<HomeBloc?>.value(
@@ -167,23 +182,26 @@ class _BookListWidgetState extends State<BookListWidget> {
             if (book.title.contains(query)) bookData.add(book);
           }
         });
-        return StreamProvider<List<BookData>?>.value(
-          initialData: bookData,
-          value: bloc.getSearchResult(query),
-          child: Consumer<List<BookData>?>(
-            builder: (context, data, child) {
-              if (data!.isEmpty) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.yellow,
-                  ),
-                );
-              }
+        return BlocListener<HomeBloc>(
+          listener: handleEvent,
+          child: StreamProvider<List<BookData>?>.value(
+            initialData: bookData,
+            value: bloc.getSearchResult(query),
+            child: Consumer<List<BookData>?>(
+              builder: (context, data, child) {
+                if (data!.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.yellow,
+                    ),
+                  );
+                }
 
-              return ListView(
-                children: newBuildBooks(bookData, context),
-              );
-            },
+                return ListView(
+                  children: newBuildBooks(bookData, context),
+                );
+              },
+            ),
           ),
         );
       }),

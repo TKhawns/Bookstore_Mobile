@@ -17,6 +17,12 @@ class OrderBloc extends BaseBloc {
     );
   }
 
+  Stream<List<OrderData>> getUserOrderList(String shopName) {
+    return Stream<List<OrderData>>.fromFuture(
+      _orderRepo.getUserOrderList(shopName),
+    );
+  }
+
   @override
   void dispatchEvent(BaseEvent event) {}
 

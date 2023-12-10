@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors, depend_on_referenced_packages
 
+import 'package:bookstore_mobile/module/order/user_order.dart';
 import 'package:bookstore_mobile/module/profile/profile_bloc.dart';
 import 'package:bookstore_mobile/module/profile/voucher.dart';
 import 'package:bookstore_mobile/module/signin/signin_page.dart';
@@ -87,7 +88,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             Container(
                               padding: EdgeInsets.only(bottom: 10),
                               child: Text(
-                                userData.displayName,
+                                "${userData.displayName} (${userData.role})",
                                 style: GoogleFonts.inter(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w500,
@@ -136,7 +137,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   Container(
                     padding: EdgeInsets.only(top: 10),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UserOrderWidget(
+                                      customerName: userData.displayName,
+                                    )));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey[50],
                         minimumSize: Size(200, 70),
@@ -151,13 +159,27 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             color: Colors.black,
                           ),
                           Container(
-                            padding: EdgeInsets.only(left: 15, right: 140),
-                            child: Text(
-                              "Book orders",
-                              style: GoogleFonts.inter(
-                                  fontSize: 21,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
+                            padding: EdgeInsets.only(left: 15, right: 115),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Book orders",
+                                  style: GoogleFonts.inter(
+                                      fontSize: 21,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    "(*)",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 17,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Icon(
