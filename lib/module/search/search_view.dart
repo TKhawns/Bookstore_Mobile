@@ -25,7 +25,9 @@ class _SearchViewState extends State<SearchView> {
     super.initState();
     searchController.addListener(() {
       var query = searchController.text;
-      searchBloc.search(query);
+      Future.delayed(Duration(seconds: 1), () {
+        searchBloc.search(query);
+      });
     });
   }
 
@@ -82,6 +84,12 @@ class _SearchViewState extends State<SearchView> {
               initialData: [],
               stream: searchBloc.searchController.stream,
               builder: (context, snapshot) {
+                if (snapshot.data!.isEmpty) {
+                  return Center(
+                      child: CircularProgressIndicator(
+                    backgroundColor: Colors.yellow,
+                  ));
+                }
                 return ListView(
                   children: newBuildBooks(snapshot.data, context),
                 );

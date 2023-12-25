@@ -33,7 +33,10 @@ class SearchBookBloc extends BaseBloc {
       return;
     }
     _filter(query).then((value) {
-      searchController.sink.add(value);
+      searchController.sink.add([]);
+      Future.delayed(Duration(milliseconds: 200), () {
+        searchController.sink.add(value);
+      });
     });
   }
 
@@ -49,6 +52,14 @@ class SearchBookBloc extends BaseBloc {
   Future<List<BookData>> _filter(String query) {
     var c = Completer<List<BookData>>();
     List<BookData> result = [];
+    // Stream<List<BookData>>.fromFuture(
+    //   _bookRepo.searchBookList(query),
+    // ).listen((event) {
+    //   for (var book in event) {
+    //     result.add(book);
+    //     print(book.title);
+    //   }
+    // });
     bookList.forEach((element) {
       String title = element.title.toLowerCase();
       if (title.contains(query.toLowerCase())) {

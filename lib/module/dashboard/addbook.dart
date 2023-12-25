@@ -150,7 +150,7 @@ class _AddBookPageState extends State<AddBookPageWidget> {
                     onPressed: () {
                       bloc.event.add(AddToCartEvent(
                         BookData(
-                            book_id: DateTime.now().millisecond + 25,
+                            book_id: DateTime.now().millisecond + 26,
                             title: _txtTitleController.text,
                             description: _txtDescriptionController.text,
                             cost: _txtPriceController.text,
