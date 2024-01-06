@@ -1,15 +1,16 @@
-# bookstore_mobile
-
-A new Flutter project.
+# Book Store
+# Project of Mobile Subject UET - INT3120_1
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+First you must install Flutter and packages. 
+I'm using device preview in this project, using the following command line to run:
+ ```
+flutter run -d chrome --web-port 58072
+```
+# Link backend of project: 
+```
+https://github.com/TKSkygod/BookStoreBE_Dartfrog.git
+```
 
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
